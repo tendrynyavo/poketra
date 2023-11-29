@@ -32,6 +32,6 @@ del "sources.txt"
 
 @REM @REM Convert into .war
 cd target
-jar -cvf "gestion-stock.war" *
-move "gestion-stock.war" "%TOMCAT_PATH%\webapps"
+jar -cvf "solaire.war" *
+move "solaire.war" "%TOMCAT_PATH%\webapps"
 cd ..
