@@ -7,15 +7,6 @@ public class Pointage extends Intervalle {
 
     Salle salle;
     int nombre;
-    Pointage[] pointages;
-
-    public Pointage[] getPointages() {
-        return pointages;
-    }
-
-    public void setPointages(Pointage[] pointages) {
-        this.pointages = pointages;
-    }
 
     public Salle getSalle() {
         return salle;
@@ -35,6 +26,7 @@ public class Pointage extends Intervalle {
 
     public Pointage() throws Exception {
         super();
+        this.getColumns().get(2).setName("date_pointage");
         this.setTable("pointage");
         this.setPrimaryKeyName("id_pointage");
         this.setConnection("PostgreSQL");

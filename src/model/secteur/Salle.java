@@ -1,5 +1,6 @@
 package model.secteur;
 
+import java.sql.Time;
 import connection.BddObject;
 
 public class Salle extends BddObject {
@@ -29,6 +30,11 @@ public class Salle extends BddObject {
         this.setTable("salle");
         this.setPrimaryKeyName("id_salle");
         this.setConnection("PostgreSQL");
+    }
+
+    public Salle(String id) throws Exception {
+        this();
+        this.setId(id);
     }
     
 }

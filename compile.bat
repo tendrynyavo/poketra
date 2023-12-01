@@ -18,7 +18,6 @@ copy .\config.xml .\target\WEB-INF\classes
 
 @REM Copy Front-end
 Xcopy assets .\target\assets /E /H /C /I /Y
-rmdir /s /q .\target\assets\scss
 Xcopy view .\target\ /E /H /C /I /Y
 Xcopy controller .\target\controller /E /H /C /I /Y
 
@@ -32,6 +31,6 @@ del "sources.txt"
 
 @REM @REM Convert into .war
 cd target
-jar -cvf "solaire.war" *
-move "solaire.war" "%TOMCAT_PATH%\webapps"
+jar -cvf "gestion-solaire.war" *
+move "gestion-solaire.war" "%TOMCAT_PATH%\webapps"
 cd ..

@@ -31,7 +31,7 @@ public class Panneau extends BddObject {
     }
 
     public void setCapacite(double capacite) throws IllegalArgumentException {
-        if (capacite < 0) throw new IllegalArgumentException("Capacite invalide");
+        if (capacite < 0) capacite = 0;
         this.capacite = capacite;
     }
 
