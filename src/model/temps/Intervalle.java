@@ -64,7 +64,6 @@ public class Intervalle extends BddObject {
 
     public Intervalle setDetails(String date, Connection connection) throws Exception {
         this.setDate(Date.valueOf(date));
-        this.getColumns();
         Intervalle[] details = (connection == null) ? (Intervalle[]) this.findAll(null) : (Intervalle[]) this.findAll(connection, null);
         this.setDetails(details);
         return this;
@@ -76,7 +75,7 @@ public class Intervalle extends BddObject {
                 return intervalle;
             }
         }
-        throw new IndexOutOfBoundsException(String.format("Pas de meteo a %s à la date %s", heure, this.getDate()));
+        throw new IndexOutOfBoundsException(String.format("Pas de %s a %s à la date %s", this.getClass().getSimpleName(), heure, this.getDate()));
     }
 
     public Intervalle getIntervalle(String time) {

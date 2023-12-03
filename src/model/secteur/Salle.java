@@ -1,12 +1,20 @@
 package model.secteur;
 
-import java.sql.Time;
 import connection.BddObject;
 
 public class Salle extends BddObject {
 
     String nom;
     Secteur secteur;
+    int nombre;
+
+    public int getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(int nombre) {
+        this.nombre = nombre;
+    }
 
     public String getNom() {
         return nom;

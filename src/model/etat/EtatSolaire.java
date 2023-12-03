@@ -99,6 +99,7 @@ public class EtatSolaire implements Serializable {
     }
 
     public EtatSolaire() {
+        
     }
 
     public LocalTime getHeureCoupure() {

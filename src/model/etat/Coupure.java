@@ -51,17 +51,20 @@ public class Coupure extends Secteur {
     }
 
     public EtatSolaire getEtatSolaire(int decallage, Connection connection) throws Exception {
-        this.setConsommation(100);
-        EtatSolaire etat = super.getEtatSolaire(this.getDate(), decallage, this.getConsommation(), connection);
-        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.001 : 0.001;
-        while (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) != 0) {
+        this.setConsommation(60);
+        EtatSolaire etat = this.getEtatSolaire(this.getDate(), decallage, this.getConsommation(), connection);
+        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.01 : 0.01;
+        int millis = this.getHeure().toLocalTime().toSecondOfDay();
+        int coupure = etat.getHeureCoupure().toSecondOfDay();
+        while (Math.abs(millis - coupure) >= 6000) {
             this.setConsommation(this.getConsommation() + p);
-            etat = super.getEtatSolaire(this.getDate(), decallage, this.getConsommation(), connection);
+            etat = this.getEtatSolaire(this.getDate(), decallage, this.getConsommation(), connection);
+            coupure = etat.getHeureCoupure().toSecondOfDay();
         }
         return etat;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String... args) throws Exception {
         try (Connection connection = BddObject.getPostgreSQL()) {
             Coupure[] coupures = (Coupure[]) new Coupure().findAll(connection, null);
             Salle salle = new Salle();
