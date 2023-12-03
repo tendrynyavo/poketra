@@ -53,13 +53,15 @@ public class Coupure extends Secteur {
     }
 
     public EtatSolaire getEtatSolaire(int decallage, Connection connection) throws Exception {
+        // Initialisation de la consommation
         this.setConsommation(60);
-        Meteo meteo = new Meteo();
-        meteo.setDetails(this.getDate().toString(), connection);
-        Pointage pointage = new Pointage();
-        pointage.setDetails(this.getDate().toString(), connection);
+        
+        // Data sur la meteo et pointage a la date de coupure
+        Meteo meteo = (Meteo) new Meteo().setDetails(this.getDate().toString(), connection);
+        Pointage pointage = (Pointage) new Pointage().setDetails(this.getDate().toString(), connection);
+
         EtatSolaire etat = this.getEtatSolaire(meteo, pointage, this.getConsommation(), decallage);
-        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.01 : 0.01;
+        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.0001 : 0.0001;
         int millis = this.getHeure().toLocalTime().toSecondOfDay();
         int coupure = etat.getHeureCoupure().toSecondOfDay();
         while (Math.abs(millis - coupure) >= 6000) {
