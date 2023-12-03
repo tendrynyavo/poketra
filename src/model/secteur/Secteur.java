@@ -57,44 +57,60 @@ public class Secteur extends BddObject {
         this.setPrimaryKeyName("id_secteur");
     }
 
-    public int getNombreEtudiant(Date date, Time heure, Connection connection) throws Exception {
+    public int getNombreEtudiant(Time heure, Pointage pointage) throws Exception {
         int somme = 0;
         for (Salle s : this.getSalles()) {
-            Pointage pointage = new Pointage();
             pointage.setSalle(s);
-            pointage.setDetails(date.toString(), connection);
             somme += ((Pointage) pointage.getIntervalle(heure)).getNombre();
         }
         return somme;
     }
 
     // Optimisation des performances
-    public EtatSolaire getEtatSolaire(Date date, int decallage, double consommation, Connection connection) throws Exception {
+    // public EtatSolaire getEtatSolaire(Date date, int decallage, double consommation, Connection connection) throws Exception {
+    //     Time hours = Time.valueOf("08:00:00");
+    //     EtatSolaire[] etatSolaires = new EtatSolaire[9 * decallage + 1];
+    //     EtatSolaire etat = null;
+    //     boolean connect = false;
+    //     try {
+    //         if (connection == null) {
+    //             connection = this.getConnection();
+    //             connect = true;
+    //         }
+    //         etat = new EtatSolaire();
+    //         Meteo meteo = new Meteo();
+    //         meteo.setDetails(date.toString(), connection);
+    //         double capacite = this.getPanneau().getCapacite();
+    //         for (int i = 0; i < etatSolaires.length; i++) {
+    //             double luminosite = ((Meteo) meteo.getIntervalle(hours.toString())).getLuminosite(); // Luminosite par heure
+    //             int nombre = this.getNombreEtudiant(date, hours, connection); // Nombre total du secteur
+    //             etatSolaires[i] = new EtatSolaire(hours.toLocalTime(), luminosite, nombre, consommation, capacite, this);
+    //             capacite -= etatSolaires[i].getReste(); // Capacite restante de la batterie 
+    //             hours = Time.valueOf(hours.toLocalTime().plusMinutes(60 / decallage)); // Ajouter une heure
+    //         }
+    //         etat.setConsommation(consommation);
+    //         etat.setDetails(etatSolaires);
+    //     } finally {
+    //         if (connect) connection.close();
+    //     }
+    //     return etat;
+    // }
+
+    public EtatSolaire getEtatSolaire(Meteo meteo, Pointage pointage, double consommation, int decallage) throws Exception {
         Time hours = Time.valueOf("08:00:00");
         EtatSolaire[] etatSolaires = new EtatSolaire[9 * decallage + 1];
         EtatSolaire etat = null;
-        boolean connect = false;
-        try {
-            if (connection == null) {
-                connection = this.getConnection();
-                connect = true;
-            }
-            etat = new EtatSolaire();
-            Meteo meteo = new Meteo();
-            meteo.setDetails(date.toString(), connection);
-            double capacite = this.getPanneau().getCapacite();
-            for (int i = 0; i < etatSolaires.length; i++) {
-                double luminosite = ((Meteo) meteo.getIntervalle(hours.toString())).getLuminosite(); // Luminosite par heure
-                int nombre = this.getNombreEtudiant(date, hours, connection); // Nombre total du secteur
-                etatSolaires[i] = new EtatSolaire(hours.toLocalTime(), luminosite, nombre, consommation, capacite, this);
-                capacite -= etatSolaires[i].getReste(); // Capacite restante de la batterie 
-                hours = Time.valueOf(hours.toLocalTime().plusMinutes(60 / decallage)); // Ajouter une heure
-            }
-            etat.setConsommation(consommation);
-            etat.setDetails(etatSolaires);
-        } finally {
-            if (connect) connection.close();
+        etat = new EtatSolaire();
+        double capacite = this.getPanneau().getCapacite();
+        for (int i = 0; i < etatSolaires.length; i++) {
+            double luminosite = ((Meteo) meteo.getIntervalle(hours.toString())).getLuminosite(); // Luminosite par heure
+            int nombre = this.getNombreEtudiant(hours, pointage); // Nombre total du secteur
+            etatSolaires[i] = new EtatSolaire(hours.toLocalTime(), luminosite, nombre, consommation, capacite, this);
+            capacite -= etatSolaires[i].getReste(); // Capacite restante de la batterie 
+            hours = Time.valueOf(hours.toLocalTime().plusMinutes(60 / decallage)); // Ajouter une heure
         }
+        etat.setConsommation(consommation);
+        etat.setDetails(etatSolaires);
         return etat;
     }
 
@@ -111,7 +127,11 @@ public class Secteur extends BddObject {
             Salle[] salles = (Salle[]) salle.findAll(connection, null);
             Date date = Date.valueOf("2023-11-27");
             secteur.setSalles(salles);
-            EtatSolaire etat = secteur.getEtatSolaire(date, 1, 64, connection);
+            Meteo meteo = new Meteo();
+            meteo.setDetails(date.toString(), connection);
+            Pointage pointage = new Pointage();
+            pointage.setDetails(date.toString(), connection);
+            EtatSolaire etat = secteur.getEtatSolaire(meteo, pointage, 64, 1);
             System.out.println(etat.getHeureCoupure());
             EtatSolaire[] details = etat.getDetails();
             for (EtatSolaire etatSolaire : details) {

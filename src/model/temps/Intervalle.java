@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import connection.BddObject;
+import model.pointage.Pointage;
 
 public class Intervalle extends BddObject {
 
@@ -69,10 +70,17 @@ public class Intervalle extends BddObject {
         return this;
     }
 
-    public Intervalle getIntervalle(Time heure) throws IndexOutOfBoundsException {
+    public Intervalle getIntervalle(Time heure) {
         for (Intervalle intervalle : this.getDetails()) {
             if (intervalle.between(heure)) {
-                return intervalle;
+                if (this instanceof Pointage) {
+                    Pointage pointage = (Pointage) intervalle;
+                    if (pointage.getSalle().getId().equals(((Pointage) this).getSalle().getId())) {
+                        return intervalle;
+                    }
+                } else {
+                    return intervalle;
+                }
             }
         }
         throw new IndexOutOfBoundsException(String.format("Pas de %s a %s à la date %s", this.getClass().getSimpleName(), heure, this.getDate()));

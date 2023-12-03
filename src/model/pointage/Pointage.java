@@ -1,5 +1,8 @@
 package model.pointage;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import model.secteur.Salle;
 import model.temps.Intervalle;
 

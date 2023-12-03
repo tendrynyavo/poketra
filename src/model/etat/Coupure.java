@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import connection.BddObject;
+import model.meteo.Meteo;
+import model.pointage.Pointage;
 import model.secteur.Salle;
 import model.secteur.Secteur;
 
@@ -52,13 +54,17 @@ public class Coupure extends Secteur {
 
     public EtatSolaire getEtatSolaire(int decallage, Connection connection) throws Exception {
         this.setConsommation(60);
-        EtatSolaire etat = this.getEtatSolaire(this.getDate(), decallage, this.getConsommation(), connection);
+        Meteo meteo = new Meteo();
+        meteo.setDetails(this.getDate().toString(), connection);
+        Pointage pointage = new Pointage();
+        pointage.setDetails(this.getDate().toString(), connection);
+        EtatSolaire etat = this.getEtatSolaire(meteo, pointage, this.getConsommation(), decallage);
         double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.01 : 0.01;
         int millis = this.getHeure().toLocalTime().toSecondOfDay();
         int coupure = etat.getHeureCoupure().toSecondOfDay();
         while (Math.abs(millis - coupure) >= 6000) {
             this.setConsommation(this.getConsommation() + p);
-            etat = this.getEtatSolaire(this.getDate(), decallage, this.getConsommation(), connection);
+            etat = this.getEtatSolaire(meteo, pointage, this.getConsommation(), decallage);
             coupure = etat.getHeureCoupure().toSecondOfDay();
         }
         return etat;
