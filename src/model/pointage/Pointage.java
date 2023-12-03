@@ -1,8 +1,6 @@
 package model.pointage;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
 import model.secteur.Salle;
 import model.temps.Intervalle;
 
@@ -33,6 +31,10 @@ public class Pointage extends Intervalle {
         this.setTable("pointage");
         this.setPrimaryKeyName("id_pointage");
         this.setConnection("PostgreSQL");
+    }
+
+    public static Pointage createPointage(Connection connection) throws Exception {
+        return (Pointage) createIntervalle(connection, new Pointage());
     }
     
 }

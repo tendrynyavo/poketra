@@ -1,5 +1,6 @@
 package model.meteo;
 
+import java.sql.Connection;
 import model.temps.Intervalle;
 
 public class Meteo extends Intervalle {
@@ -20,6 +21,10 @@ public class Meteo extends Intervalle {
         this.setTable("meteo");
         this.setPrimaryKeyName("id_meteo");
         this.setConnection("PostgreSQL");
+    }
+
+    public static Meteo createMeteo(Connection connection) throws Exception {
+        return (Meteo) createIntervalle(connection, new Meteo());
     }
     
 }

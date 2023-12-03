@@ -59,20 +59,14 @@ public class Intervalle extends BddObject {
         this.setPrimaryKeyName("intervalle");
     }
 
-    public boolean between(Time heure) {
-        return (heure.after(this.getDebut()) && heure.before(this.getFin())) || heure.compareTo(this.getDebut()) == 0 || heure.compareTo(this.getFin()) == 0;
+    public boolean between(Date date, Time heure) {
+        return ((heure.after(this.getDebut()) && heure.before(this.getFin())) || heure.compareTo(this.getDebut()) == 0 || heure.compareTo(this.getFin()) == 0) && this.getDate().compareTo(date) == 0;
     }
 
-    public Intervalle setDetails(String date, Connection connection) throws Exception {
-        this.setDate(Date.valueOf(date));
-        Intervalle[] details = (connection == null) ? (Intervalle[]) this.findAll(null) : (Intervalle[]) this.findAll(connection, null);
-        this.setDetails(details);
-        return this;
-    }
-
-    public Intervalle getIntervalle(Time heure) {
+    // Optimisation recherche dichotomique
+    public Intervalle getIntervalle(Date date, Time heure) {
         for (Intervalle intervalle : this.getDetails()) {
-            if (intervalle.between(heure)) {
+            if (intervalle.between(date, heure)) {
                 if (this instanceof Pointage) {
                     Pointage pointage = (Pointage) intervalle;
                     if (pointage.getSalle().getId().equals(((Pointage) this).getSalle().getId())) {
@@ -86,8 +80,14 @@ public class Intervalle extends BddObject {
         throw new IndexOutOfBoundsException(String.format("Pas de %s a %s à la date %s", this.getClass().getSimpleName(), heure, this.getDate()));
     }
 
-    public Intervalle getIntervalle(String time) {
-        return this.getIntervalle(Time.valueOf(time));
+    public Intervalle getIntervalle(String date, String time) {
+        return this.getIntervalle(Date.valueOf(date), Time.valueOf(time));
+    }
+
+    public static Intervalle createIntervalle(Connection connection, Intervalle intervalle) throws Exception {
+        Intervalle[] details = (connection == null) ? (Intervalle[]) intervalle.findAll(null) : (Intervalle[]) intervalle.findAll(connection, null);
+        intervalle.setDetails(details);
+        return intervalle;
     }
     
 }

@@ -52,21 +52,19 @@ public class Coupure extends Secteur {
         this.setConnection("PostgreSQL");
     }
 
-    public EtatSolaire getEtatSolaire(int decallage, Connection connection) throws Exception {
+    public EtatSolaire getEtatSolaire(Meteo meteo, Pointage pointage, int decallage) throws Exception {
         // Initialisation de la consommation
         this.setConsommation(60);
-        
-        // Data sur la meteo et pointage a la date de coupure
-        Meteo meteo = (Meteo) new Meteo().setDetails(this.getDate().toString(), connection);
-        Pointage pointage = (Pointage) new Pointage().setDetails(this.getDate().toString(), connection);
 
-        EtatSolaire etat = this.getEtatSolaire(meteo, pointage, this.getConsommation(), decallage);
+        EtatSolaire etat = this.getEtatSolaire(this.getDate(), meteo, pointage, this.getConsommation(), decallage);
+        if (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) return etat;
+        
         double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.0001 : 0.0001;
         int millis = this.getHeure().toLocalTime().toSecondOfDay();
         int coupure = etat.getHeureCoupure().toSecondOfDay();
         while (Math.abs(millis - coupure) >= 6000) {
             this.setConsommation(this.getConsommation() + p);
-            etat = this.getEtatSolaire(meteo, pointage, this.getConsommation(), decallage);
+            etat = this.getEtatSolaire(this.getDate(), meteo, pointage, this.getConsommation(), decallage);
             coupure = etat.getHeureCoupure().toSecondOfDay();
         }
         return etat;
@@ -79,7 +77,12 @@ public class Coupure extends Secteur {
             salle.setSecteur(coupures[0]);
             Salle[] salles = (Salle[]) salle.findAll(connection, null);
             coupures[0].setSalles(salles);
-            EtatSolaire etat = coupures[0].getEtatSolaire(1, connection);
+            
+            // Data sur la meteo et pointage a la date de coupure
+            Meteo meteo = Meteo.createMeteo(connection);
+            Pointage pointage = Pointage.createPointage(connection);
+            
+            EtatSolaire etat = coupures[0].getEtatSolaire(meteo, pointage, 1);
             System.out.println(etat.getHeureCoupure());
             System.out.println(etat.getConsommation());
             EtatSolaire[] details = etat.getDetails();
