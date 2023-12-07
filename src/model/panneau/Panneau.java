@@ -21,6 +21,10 @@ public class Panneau extends BddObject {
         return puissance;
     }
 
+    public double getPuissanceMin() {
+        return convertWmin(this.getPuissance());
+    }
+
     public void setPuissance(double puissance) throws IllegalArgumentException {
         if (puissance < 0) throw new IllegalArgumentException("Puissance invalide");
         this.puissance = puissance;
@@ -28,6 +32,10 @@ public class Panneau extends BddObject {
 
     public double getCapacite() {
         return capacite;
+    }
+
+    public double getCapaciteMin() {
+        return convertWmin(this.getCapacite());
     }
 
     public void setCapacite(double capacite) throws IllegalArgumentException {
@@ -40,6 +48,10 @@ public class Panneau extends BddObject {
         this.setTable("panneau");
         this.setPrimaryKeyName("id_panneau");
         this.setConnection("PostgreSQL");
+    }
+
+    public static double convertWmin(double watt) {
+        return watt * 60;
     }
 
 }

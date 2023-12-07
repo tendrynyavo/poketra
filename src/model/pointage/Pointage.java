@@ -1,6 +1,9 @@
 package model.pointage;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.Time;
+
 import model.secteur.Salle;
 import model.temps.Intervalle;
 
@@ -35,6 +38,15 @@ public class Pointage extends Intervalle {
 
     public static Pointage createPointage(Connection connection) throws Exception {
         return (Pointage) createIntervalle(connection, new Pointage());
+    }
+
+    public Pointage(Date date, Time debut, Time fin, Salle salle, int nombre) throws Exception {
+        this();
+        this.setDate(date);
+        this.setDebut(debut);
+        this.setFin(fin);
+        this.setSalle(salle);
+        this.setNombre(nombre);
     }
     
 }

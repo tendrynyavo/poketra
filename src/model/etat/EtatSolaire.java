@@ -2,17 +2,37 @@ package model.etat;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import model.meteo.Meteo;
 import model.secteur.Secteur;
 
 public class EtatSolaire implements Serializable {
     
     LocalTime heure;
+    Meteo meteo;
     double luminosite;
     int nombre;
     double consommation;
     double capacite;
+    double puissance;
     Secteur secteur;
     EtatSolaire[] details;
+    
+
+    public Meteo getMeteo() {
+        return meteo;
+    }
+
+    public void setMeteo(Meteo meteo) {
+        this.meteo = meteo;
+    }
+
+    public double getPuissance() {
+        return puissance;
+    }
+
+    public void setPuissance(double puissance) {
+        this.puissance = puissance;
+    }
 
     public double getConsommation() {
         return consommation;
@@ -59,7 +79,7 @@ public class EtatSolaire implements Serializable {
     }
 
     public double getPuissanceSolaire() {
-        return (this.getLuminosite() / 10) * secteur.getPanneau().getPuissance();
+        return (this.getLuminosite() / 10) * this.getPuissance();
     }
 
     public double getConsommationEtudiant() {
@@ -89,13 +109,19 @@ public class EtatSolaire implements Serializable {
         this.details = details;
     }
 
-    public EtatSolaire(LocalTime heure, double luminosite, int nombre, double consommation, double capacite, Secteur secteur) {
+    public EtatSolaire(LocalTime heure, double luminosite, int nombre, double consommation, double capacite, double puissance, Secteur secteur) {
         this.setHeure(heure);
         this.setLuminosite(luminosite);
         this.setNombre(nombre);
         this.setConsommation(consommation);
         this.setCapacite(capacite);
+        this.setPuissance(puissance);
         this.setSecteur(secteur);
+    }
+
+    public EtatSolaire(int nombre, double consommation) {
+        this.setNombre(nombre);
+        this.setConsommation(consommation);
     }
 
     public EtatSolaire() {

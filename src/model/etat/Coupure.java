@@ -52,35 +52,50 @@ public class Coupure extends Secteur {
         this.setConnection("PostgreSQL");
     }
 
-    public EtatSolaire getEtatSolaire(Meteo meteo, Pointage pointage, int decallage) throws Exception {
+    public EtatSolaire getEtatSolaire(Meteo meteo, Pointage pointage, int decallage) {
         // Initialisation de la consommation
         this.setConsommation(60);
 
         EtatSolaire etat = this.getEtatSolaire(this.getDate(), meteo, pointage, this.getConsommation(), decallage);
         if (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) return etat;
         
-        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.0001 : 0.0001;
-        int millis = this.getHeure().toLocalTime().toSecondOfDay();
-        int coupure = etat.getHeureCoupure().toSecondOfDay();
-        while (Math.abs(millis - coupure) >= 6000) {
+        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.001 : 0.001;
+        int millis = this.getHeure().toLocalTime().toSecondOfDay() / 60;
+        int coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
+        while (Math.abs(millis - coupure) >= 5) {
             this.setConsommation(this.getConsommation() + p);
-            etat = this.getEtatSolaire(this.getDate(), meteo, pointage, this.getConsommation(), decallage);
-            coupure = etat.getHeureCoupure().toSecondOfDay();
+            etat = super.getEtatSolaire(this.getDate(), meteo, pointage, this.getConsommation(), decallage);
+            coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
         }
         return etat;
+    }
+
+    public double getTotalNombre(Pointage pointage) {
+        int somme = 0;
+        for (Salle s : this.getSalles()) {
+            for (Pointage detail : (Pointage[]) pointage.getDetails()) {
+                if (detail.getDate().compareTo(this.getDate()) == 0 && detail.getSalle().getId().equals(s.getId()))
+                    somme += detail.getNombre();
+            }
+        }
+        return somme;
     }
 
     public static void main(String... args) throws Exception {
         try (Connection connection = BddObject.getPostgreSQL()) {
             Coupure[] coupures = (Coupure[]) new Coupure().findAll(connection, null);
             Salle salle = new Salle();
-            salle.setSecteur(coupures[0]);
-            Salle[] salles = (Salle[]) salle.findAll(connection, null);
-            coupures[0].setSalles(salles);
+            
+            for (Coupure coupure : coupures) {
+                salle.setSecteur(coupure);
+                Salle[] salles = (Salle[]) salle.findAll(connection, null);
+                coupures[0].setSalles(salles);
+            }
             
             // Data sur la meteo et pointage a la date de coupure
             Meteo meteo = Meteo.createMeteo(connection);
             Pointage pointage = Pointage.createPointage(connection);
+            System.out.println(coupures[0].getTotalNombre(pointage));
             
             EtatSolaire etat = coupures[0].getEtatSolaire(meteo, pointage, 1);
             System.out.println(etat.getHeureCoupure());
