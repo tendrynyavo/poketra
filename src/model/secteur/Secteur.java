@@ -9,6 +9,7 @@ import model.etat.EtatSolaire;
 import model.meteo.Meteo;
 import model.panneau.Panneau;
 import model.pointage.Pointage;
+import model.temps.Intervalle;
 
 public class Secteur extends BddObject {
 
@@ -76,7 +77,7 @@ public class Secteur extends BddObject {
         double minutes = 60.0 * quotient;
         for (int i = 0; i < etatSolaires.length; i++) {
             // Luminosite par heure par date
-            Meteo luminosite = (Meteo) meteo.getIntervalle(date, hours);
+            Meteo luminosite = (Meteo) meteo.getIntervalle(hours);
             // Nombre total du secteur
             etatSolaires[i] = new EtatSolaire(hours.toLocalTime(), luminosite.getLuminosite(), this.getNombreEtudiant(date, hours, pointage), consommation * quotient, capacite, this.getPanneau().getPuissance() * quotient, this);
             capacite -= etatSolaires[i].getReste(); // Capacite restante de la batterie
@@ -104,7 +105,7 @@ public class Secteur extends BddObject {
         int temp = 0;
         EtatSolaire etat = null;
         for (Coupure coupure : coupures) {
-            etat = coupure.getEtatSolaire(meteo, pointage, decallage);
+            etat = coupure.getEtatSolaire(decallage, 10);
             consommation += etat.getConsommation();
             if (coupure.getDate().toLocalDate().getDayOfWeek() == date.toLocalDate().getDayOfWeek()) {
                 nombre += coupure.getTotalNombre(pointage) / 2;
@@ -149,9 +150,12 @@ public class Secteur extends BddObject {
             Date date2 = Date.valueOf("2023-12-04");
             // System.out.println(date.toLocalDate().getDayOfWeek() == date2.toLocalDate().getDayOfWeek());
             secteur.setSalles(salles);
-            Meteo meteo = Meteo.createMeteo(connection);
+            // Meteo meteo = Meteo.createMeteo(connection);
+            Meteo meteo = (Meteo) Intervalle.createIntervalle(date, connection, new Meteo());
             Pointage pointage = Pointage.createPointage(connection);
-            Coupure coupure = secteur.predir(meteo, pointage, date2, 1);
+            // Coupure coupure = secteur.predir(meteo, pointage, date2, 1);
+
+            System.out.println(((Meteo) meteo.getIntervalle(Time.valueOf("08:00:00"))).getLuminosite());
 
             // Coupure[] coupures = (Coupure[]) new Coupure().findAll(connection, null);
             // salle = new Salle();
@@ -166,13 +170,13 @@ public class Secteur extends BddObject {
             // System.out.println(e.getNombre());
             // Meteo meteo = Meteo.createMeteo(connection);
             // EtatSolaire etat = secteur.getEtatSolaire(date, meteo, 170, 60.23, 2);
-            EtatSolaire etat = coupure.getEtat();
-            System.out.println(etat.getHeureCoupure());
-            System.out.println(etat.getConsommation());
-            EtatSolaire[] details = etat.getDetails();
-            for (EtatSolaire etatSolaire : details) {
-                System.out.println(etatSolaire.getHeure() + " " + etatSolaire.getConsommationEtudiant() + " " + etatSolaire.getPuissanceSolaire() + " " + etatSolaire.getReste() + " " + etatSolaire.getCapacite() + " " + etatSolaire.isCoupure());
-            }
+            // EtatSolaire etat = coupure.getEtat();
+            // System.out.println(etat.getHeureCoupure());
+            // System.out.println(etat.getConsommation());
+            // EtatSolaire[] details = etat.getDetails();
+            // for (EtatSolaire etatSolaire : details) {
+            //     System.out.println(etatSolaire.getHeure() + " " + etatSolaire.getConsommationEtudiant() + " " + etatSolaire.getPuissanceSolaire() + " " + etatSolaire.getReste() + " " + etatSolaire.getCapacite() + " " + etatSolaire.isCoupure());
+            // }
         }
     }
     

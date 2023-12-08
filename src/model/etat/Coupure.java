@@ -79,21 +79,22 @@ public class Coupure extends Secteur {
         this.setDate(date);
     }
 
-    public EtatSolaire getEtatSolaire(Pointage pointage, int decallage) {
+    public EtatSolaire getEtatSolaire(int decallage, int pas) {
         // Initialisation de la consommation
         this.setConsommation(100);
 
         EtatSolaire etat = this.getEtatSolaire(this.getDate(), meteo, pointage, this.getConsommation(), decallage);
         if (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) return etat;
         
-        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -0.01 : 0.01;
+        double increment = 1 / (double) pas;
+
+        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -increment : increment;
         int millis = this.getHeure().toLocalTime().toSecondOfDay() / 60;
         int coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
-        while (Math.abs(millis - coupure) >= 1) {
+        while (Math.abs(millis - coupure) >= 45) {
             this.setConsommation(this.getConsommation() + p);
-            etat = super.getEtatSolaire(this.getDate(), this.getMeteo(), pointage, this.getConsommation(), decallage);
+            etat = super.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
             coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
-            System.out.println(this.getConsommation());
         }
         return etat;
     }
@@ -120,17 +121,31 @@ public class Coupure extends Secteur {
                 coupure.setSalles(salles);
                 Meteo meteo = (Meteo) Intervalle.createIntervalle(coupure.getDate(), connection, new Meteo());
                 coupure.setMeteo(meteo);
+                Pointage pointage = (Pointage) Intervalle.createIntervalle(coupure.getDate(), connection, new Pointage());
+                coupure.setPointage(pointage);
             }
             
             // Data sur la meteo et pointage a la date de coupure
             Meteo meteo = Meteo.createMeteo(connection);
             Pointage pointage = Pointage.createPointage(connection);
             // System.out.println(coupures[0].getTotalNombre(pointage));
+
+            // EtatSolaire etat = coupures[11].getEtatSolaire(60);
+
+            for (Coupure coupure : coupures) {
+                long startTime = System.currentTimeMillis();
+    
+                EtatSolaire etat = coupure.getEtatSolaire(60, 100);
+    
+                long endTime = System.currentTimeMillis();
+                
+                System.out.println(etat.getHeureCoupure());
+                System.out.println(etat.getConsommation());
+                System.out.println("That took " + (endTime - startTime) + " milliseconds");
+            }
+
             
-            EtatSolaire etat = coupures[0].getEtatSolaire(pointage, 60);
-            System.out.println(etat.getHeureCoupure());
-            System.out.println(etat.getConsommation());
-            EtatSolaire[] details = etat.getDetails();
+            // EtatSolaire[] details = etat.getDetails();
             // for (EtatSolaire etatSolaire : details) {
             //     System.out.println(etatSolaire.getHeure() + " " + etatSolaire.getConsommationEtudiant() + " " + etatSolaire.getPuissanceSolaire() + " " + etatSolaire.getReste() + " " + etatSolaire.getCapacite() + " " + etatSolaire.isCoupure());
             // }
