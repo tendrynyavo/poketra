@@ -94,7 +94,6 @@ public class Coupure extends Secteur {
             etat = super.getEtatSolaire(this.getDate(), this.getMeteo(), pointage, this.getConsommation(), decallage);
             coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
             System.out.println(this.getConsommation());
-            System.out.println(this.getConsommation());
         }
         return etat;
     }
@@ -128,7 +127,7 @@ public class Coupure extends Secteur {
             Pointage pointage = Pointage.createPointage(connection);
             // System.out.println(coupures[0].getTotalNombre(pointage));
             
-            EtatSolaire etat = coupures[0].getEtatSolaire(pointage, 1);
+            EtatSolaire etat = coupures[0].getEtatSolaire(pointage, 60);
             System.out.println(etat.getHeureCoupure());
             System.out.println(etat.getConsommation());
             EtatSolaire[] details = etat.getDetails();
