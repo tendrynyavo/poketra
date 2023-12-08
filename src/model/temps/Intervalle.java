@@ -80,11 +80,36 @@ public class Intervalle extends BddObject {
         throw new IndexOutOfBoundsException(String.format("Pas de %s a %s à la date %s", this.getClass().getSimpleName(), heure, this.getDate()));
     }
 
+    public static void binarySearch(int tab[], int f, int l, int val){
+        int mid = (f + l)/2;
+        while(f <= l){
+            if (tab[mid] < val){
+                f = mid + 1;   
+            } else if(tab[mid] == val) {
+                System.out.println("L'élément se trouve à l'index: " + mid);
+                break;
+            } else {
+                l = mid - 1;
+            }
+            mid = (f + l)/2;
+        }
+        if (f > l){
+            System.out.println("L'élément n'existe pas!");
+        }
+    }
+
     public Intervalle getIntervalle(String date, String time) {
         return this.getIntervalle(Date.valueOf(date), Time.valueOf(time));
     }
 
     public static Intervalle createIntervalle(Connection connection, Intervalle intervalle) throws Exception {
+        Intervalle[] details = (connection == null) ? (Intervalle[]) intervalle.findAll(null) : (Intervalle[]) intervalle.findAll(connection, null);
+        intervalle.setDetails(details);
+        return intervalle;
+    }
+
+    public static Intervalle createIntervalle(Date date, Connection connection, Intervalle intervalle) throws Exception {
+        intervalle.setDate(date);
         Intervalle[] details = (connection == null) ? (Intervalle[]) intervalle.findAll(null) : (Intervalle[]) intervalle.findAll(connection, null);
         intervalle.setDetails(details);
         return intervalle;
