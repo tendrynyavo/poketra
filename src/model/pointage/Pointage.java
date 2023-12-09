@@ -3,7 +3,6 @@ package model.pointage;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Time;
-
 import model.secteur.Salle;
 import model.temps.Intervalle;
 

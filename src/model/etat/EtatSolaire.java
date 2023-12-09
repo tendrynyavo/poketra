@@ -16,7 +16,6 @@ public class EtatSolaire implements Serializable {
     double puissance;
     Secteur secteur;
     EtatSolaire[] details;
-    
 
     public Meteo getMeteo() {
         return meteo;
