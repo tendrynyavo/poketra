@@ -1,5 +1,6 @@
 package model.secteur;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Time;
 import connection.BddObject;
@@ -8,6 +9,7 @@ import model.etat.EtatSolaire;
 import model.meteo.Meteo;
 import model.panneau.Panneau;
 import model.pointage.Pointage;
+import model.temps.Intervalle;
 
 public class Secteur extends BddObject {
 
@@ -115,6 +117,36 @@ public class Secteur extends BddObject {
         }
         if (temp == 0) throw new IllegalArgumentException(String.format("Pas de donnée a ce jour %", date.toLocalDate().getDayOfWeek()));
         return new EtatSolaire(Math.round(nombre / temp), consommation / coupures.length);
+    }
+
+    public Coupure predir(Date date, int decallage, Connection connection) throws Exception {
+        Coupure coupure = new Coupure();
+        coupure.setId(this.getId());
+        Coupure[] coupures = (Coupure[]) coupure.findAll(connection, null);
+        Salle salle = new Salle();
+        
+        for (Coupure c : coupures) {
+            salle.setSecteur(coupure);
+            Salle[] salles = (Salle[]) salle.findAll(connection, null);
+            c.setSalles(salles);
+        }
+        
+        EtatSolaire moyenne = this.getMoyenne(date, decallage, coupures);
+        Meteo meteo = (Meteo) Intervalle.createIntervalle(date, connection, new Meteo());
+        EtatSolaire etat = this.getEtatSolaire(date, meteo, moyenne.getNombre(), moyenne.getConsommation(), decallage);
+        coupure.setEtat(etat);
+        return coupure;
+    }
+
+    public static Coupure predir(String id, String date, String decallage) throws Exception {
+        try (Connection connection = BddObject.getPostgreSQL()) {
+            Secteur secteur = (Secteur) new Secteur().setId(id).getById(connection);
+            Salle salle = new Salle();
+            salle.setSecteur(secteur);
+            Salle[] salles = (Salle[]) salle.findAll(connection, null);
+            secteur.setSalles(salles);
+            return secteur.predir(Date.valueOf(date), Integer.parseInt(decallage), connection);
+        }
     }
     
 }
