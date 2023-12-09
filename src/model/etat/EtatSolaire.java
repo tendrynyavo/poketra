@@ -1,6 +1,8 @@
 package model.etat;
 
 import java.io.Serializable;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalTime;
 import model.meteo.Meteo;
 import model.secteur.Secteur;
@@ -81,8 +83,16 @@ public class EtatSolaire implements Serializable {
         return (this.getLuminosite() / 10) * this.getPuissance();
     }
 
+    public String getPuissanceSolaireFormat() {
+        return format(this.getPuissanceSolaire());
+    }
+
     public double getConsommationEtudiant() {
         return this.getNombre() * this.getConsommation();
+    }
+
+    public String getConsommationEtudiantFormat() {
+        return format(this.getConsommationEtudiant());
     }
 
     public double getReste() {
@@ -95,8 +105,16 @@ public class EtatSolaire implements Serializable {
         return this.getCapacite() <= (this.getSecteur().getPanneau().getCapacite() / 2);
     }
 
+    public String getIcon() {
+        return (this.isCoupure()) ? "off" : "mode";
+    }
+
     public double getCapacite() {
         return capacite;
+    }
+
+    public String getCapaciteFormat() {
+        return format(this.getCapacite());
     }
 
     public void setCapacite(double capacite) {
@@ -133,6 +151,12 @@ public class EtatSolaire implements Serializable {
                 return etatSolaire.getHeure();
         }
         return LocalTime.of(17, 00);
+    }
+
+    public static String format(double number) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        return df.format(number);
     }
 
 }

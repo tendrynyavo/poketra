@@ -22,6 +22,14 @@ public class Secteur extends BddObject {
         return salles;
     }
 
+    public String getSallesLettre() {
+        StringBuilder string = new StringBuilder();
+        for (Salle salle : this.getSalles()) {
+            string.append(salle.getNom() + ", ");
+        }
+        return string.substring(0, string.length() - 2).toString();
+    }
+
     public void setSalles(Salle[] salles) throws IllegalArgumentException {
         if (salles.length <= 0) throw new IllegalArgumentException("Salles invalides");
         this.salles = salles;
@@ -115,27 +123,33 @@ public class Secteur extends BddObject {
                 temp++;
             }
         }
-        if (temp == 0) throw new IllegalArgumentException(String.format("Pas de donnée a ce jour %", date.toLocalDate().getDayOfWeek()));
+        if (temp == 0) throw new IllegalArgumentException(String.format("Pas de donnee a ce jour %s", date.toLocalDate().getDayOfWeek().toString()));
         return new EtatSolaire(Math.round(nombre / temp), consommation / coupures.length);
     }
 
-    public Coupure predir(Date date, int decallage, Connection connection) throws Exception {
-        Coupure coupure = new Coupure();
-        coupure.setId(this.getId());
-        Coupure[] coupures = (Coupure[]) coupure.findAll(connection, null);
+    public Coupure predir(String date, int decallage, Connection connection) throws Exception {
+        Coupure c = new Coupure();
+        c.setId(this.getId());
+        
+        Coupure[] coupures = (Coupure[]) c.findAll(connection, null);
+        c.setNom(this.getNom());
+        c.setDate(date);
+        c.setPanneau(this.getPanneau());
+        c.setSalles(this.getSalles());
         Salle salle = new Salle();
         
-        for (Coupure c : coupures) {
+        for (Coupure coupure : coupures) {
             salle.setSecteur(coupure);
-            Salle[] salles = (Salle[]) salle.findAll(connection, null);
-            c.setSalles(salles);
+            coupure.setSalles((Salle[]) salle.findAll(connection, null));
+            coupure.setMeteo((Meteo) Intervalle.createIntervalle(coupure.getDate(), connection, new Meteo()));
+            coupure.setPointage((Pointage) Intervalle.createIntervalle(coupure.getDate(), connection, new Pointage()));
         }
         
-        EtatSolaire moyenne = this.getMoyenne(date, decallage, coupures);
-        Meteo meteo = (Meteo) Intervalle.createIntervalle(date, connection, new Meteo());
-        EtatSolaire etat = this.getEtatSolaire(date, meteo, moyenne.getNombre(), moyenne.getConsommation(), decallage);
-        coupure.setEtat(etat);
-        return coupure;
+        EtatSolaire moyenne = this.getMoyenne(c.getDate(), 60, coupures);
+        Meteo meteo = (Meteo) Intervalle.createIntervalle(c.getDate(), connection, new Meteo());
+        EtatSolaire etat = this.getEtatSolaire(c.getDate(), meteo, moyenne.getNombre(), moyenne.getConsommation(), decallage);
+        c.setEtat(etat);
+        return c;
     }
 
     public static Coupure predir(String id, String date, String decallage) throws Exception {
@@ -145,7 +159,7 @@ public class Secteur extends BddObject {
             salle.setSecteur(secteur);
             Salle[] salles = (Salle[]) salle.findAll(connection, null);
             secteur.setSalles(salles);
-            return secteur.predir(Date.valueOf(date), Integer.parseInt(decallage), connection);
+            return secteur.predir(date, Integer.parseInt(decallage), connection);
         }
     }
     

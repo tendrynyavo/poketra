@@ -36,7 +36,8 @@ public class Coupure extends Secteur {
         return consommation;
     }
 
-    public void setConsommation(double consommation) {
+    public void setConsommation(double consommation) throws IllegalArgumentException {
+        if (consommation < 0) throw new IllegalArgumentException("Consommation est négative");
         this.consommation = consommation;
     }
 
@@ -60,6 +61,11 @@ public class Coupure extends Secteur {
         this.date = date;
     }
 
+    public void setDate(String date) throws IllegalArgumentException {
+        if (date.isEmpty()) throw new IllegalArgumentException("Date est invalide");
+        this.setDate(Date.valueOf(date));
+    }
+
     public Coupure() throws Exception {
         super();
         this.getColumns().get(1).setName("date_coupure");
@@ -80,7 +86,7 @@ public class Coupure extends Secteur {
         // Initialisation de la consommation
         this.setConsommation(100);
 
-        EtatSolaire etat = this.getEtatSolaire(this.getDate(), meteo, pointage, this.getConsommation(), decallage);
+        EtatSolaire etat = this.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
         if (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) return etat;
         
         double increment = (1 / (double) pas);
@@ -92,21 +98,8 @@ public class Coupure extends Secteur {
             this.setConsommation(this.getConsommation() + p);
             etat = super.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
             coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
-            System.out.println(this.getConsommation());
         }
         return etat;
-    }
-
-    public double getTotalNombre() {
-        int somme = 0;
-        for (Salle s : this.getSalles()) {
-            for (Pointage detail : (Pointage[]) this.getPointage().getDetails()) {
-                if (detail.getSalle().getId().equals(s.getId())) {
-                    somme += detail.getNombre();
-                }
-            }
-        }
-        return somme;
     }
     
     public double getNombreMoyenne() {
