@@ -4,17 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <title>Prediction</title>
 </head>
 <body>
-    <form class="container w-50 p-5 mt-5 bg-white" action="/gestion-stock/controller/entree/entree.jsp" method="POST">
-        <h2 class="mb-4">Prediction de coupure de courant</h2>
-        <div class="mb-3">
-            <label for="date" class="form-label">Date</label>
-            <input type="date" class="form-control" name="date">
+    <div class="row">
+        <h2 class="text-center mt-5">Prediction Solaire</h2>
+        <div class="col-md-6 d-flex justify-content-center mt-5">
+            <img style="border-radius: 20px;" width="500" height="500" src="../assets/img/téléchargement (1).jpg" alt="" srcset="">
         </div>
-        <button type="submit" class="btn btn-outline-info px-5">Valider</button>
-    </form>
+        <div class="col-md-6">
+            <form class="w-75 mt-5 bg-white" action="/gestion-stock/controller/entree/entree.jsp" method="POST">
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" name="date">
+                </div>
+                <button type="submit" class="btn btn-outline-info px-5">Valider</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

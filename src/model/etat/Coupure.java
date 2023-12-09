@@ -92,6 +92,7 @@ public class Coupure extends Secteur {
             this.setConsommation(this.getConsommation() + p);
             etat = super.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
             coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
+            System.out.println(this.getConsommation());
         }
         return etat;
     }
@@ -107,7 +108,7 @@ public class Coupure extends Secteur {
         }
         return somme;
     }
-
+    
     public double getNombreMoyenne() {
         int moyenne = 0;
         for (Salle s : this.getSalles()) {
