@@ -9,7 +9,7 @@ import model.temps.Intervalle;
 public class Pointage extends Intervalle {
 
     Salle salle;
-    int nombre;
+    double nombre;
 
     public Salle getSalle() {
         return salle;
@@ -19,17 +19,17 @@ public class Pointage extends Intervalle {
         this.salle = salle;
     }
 
-    public int getNombre() {
+    public double getNombre() {
         return nombre;
     }
 
-    public void setNombre(int nombre) {
+    public void setNombre(double nombre) {
         this.nombre = nombre;
     }
 
     public Pointage() throws Exception {
         super();
-        this.getColumns().get(2).setName("date_pointage");
+        this.getColumn("date").setName("date_pointage");
         this.setTable("pointage");
         this.setPrimaryKeyName("id_pointage");
         this.setConnection("PostgreSQL");
@@ -39,7 +39,7 @@ public class Pointage extends Intervalle {
         return (Pointage) createIntervalle(connection, new Pointage());
     }
 
-    public Pointage(Date date, Time debut, Time fin, Salle salle, int nombre) throws Exception {
+    public Pointage(Date date, Time debut, Time fin, Salle salle, double nombre) throws Exception {
         this();
         this.setDate(date);
         this.setDebut(debut);

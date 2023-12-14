@@ -36,6 +36,7 @@ CREATE TABLE Coupure(
    heure TIME,
    date_coupure DATE,
    id_secteur VARCHAR(50)  NOT NULL,
+   consommation DOUBLE PRECISION NOT NULL 0,
    PRIMARY KEY(id_coupure),
    FOREIGN KEY(id_secteur) REFERENCES Secteur(id_secteur)
 );

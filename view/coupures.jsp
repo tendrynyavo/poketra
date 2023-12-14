@@ -3,7 +3,7 @@
 <%@page import="model.secteur.Secteur" %>
 <%@page errorPage="./index.jsp" %>
 <%
-    Coupure coupure = Secteur.predir(request.getParameter("secteur"), request.getParameter("date"), request.getParameter("decallage"));
+    Coupure coupure = Coupure.detail(request.getParameter("coupure"), "60");
     EtatSolaire etatSolaire = coupure.getEtat();
 %>
 <!DOCTYPE html>
@@ -26,7 +26,7 @@
             <li>Puissance : <%=coupure.getPanneau().getPuissance() %> Wh</li>
             <li>Salles : <%=coupure.getSallesLettre() %></li>
             <li>Date : <%=coupure.getDate() %></li>
-            <li>Heure de coupure : <%=coupure.getHeure() %></li>
+            <li>Heure de coupure : <%=etatSolaire.getHeureCoupure() %></li>
             <li>Consommation moyenne par étudiant : <%=etatSolaire.getConsommationFormat() %></li>
         </ul>
         <table class="table table-borderless">
@@ -45,7 +45,7 @@
                 <% for (EtatSolaire detail : etatSolaire.getDetails()) { %>
                 <tr>
                     <td><%=detail.getHeure() %></td>
-                    <td><%=detail.getLuminosite().getLuminosite() %></td>
+                    <td><%=detail.getLuminosite() %></td>
                     <td><%=detail.getNombreFormat() %></td>
                     <td><%=detail.getConsommationEtudiantFormat() %></td>
                     <td><%=detail.getPuissanceSolaireFormat() %></td>

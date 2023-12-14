@@ -1,6 +1,8 @@
+<%@page import="model.secteur.Secteur" %>
 <%@page isErrorPage="true" %>
 <%
     String error = (exception == null) ? "" : exception.getMessage();
+    Secteur[] secteurs = (Secteur[]) new Secteur().findAll(null);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +20,7 @@
             <img style="border-radius: 20px;" width="500" height="500" src="/gestion-solaire/assets/img/téléchargement (1).jpg" alt="" srcset="">
         </div>
         <div class="col-md-6">
-            <form class="w-75 mt-5 bg-white" action="/gestion-solaire/detail-secteur.jsp" method="POST">
+            <form class="w-75 mt-5 bg-white" action="/gestion-solaire/detail-secteur.jsp" method="GET">
                 <div class="mb-3">
                     <label for="date" class="form-label">Date</label>
                     <input type="date" class="form-control" name="date">
@@ -29,6 +31,14 @@
                         <option value="1">Par heure</option>
                         <option value="2">Tous les 30 minutes</option>
                         <option value="60">Par minute</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="magasin" class="form-label">Secteur</label>
+                    <select class="form-select" name="secteur">
+                        <% for (Secteur secteur : secteurs) { %>
+                        <option value="<%=secteur.getId() %>"><%=secteur.getNom() %></option>
+                        <% } %>
                     </select>
                 </div>
                 <h4 class="my-3 text-danger"><%=error %></h4>

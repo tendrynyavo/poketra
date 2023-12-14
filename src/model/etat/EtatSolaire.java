@@ -11,8 +11,8 @@ public class EtatSolaire implements Serializable {
     
     LocalTime heure;
     Meteo meteo;
-    double luminosite;
-    int nombre;
+    Meteo luminosite;
+    double nombre;
     double consommation;
     double capacite;
     double puissance;
@@ -39,6 +39,10 @@ public class EtatSolaire implements Serializable {
         return consommation;
     }
 
+    public String getConsommationFormat() {
+        return format(this.getConsommation(), "#.##");
+    }
+
     public void setConsommation(double consommation) {
         this.consommation = consommation;
     }
@@ -51,19 +55,23 @@ public class EtatSolaire implements Serializable {
         this.heure = heure;
     }
 
-    public double getLuminosite() {
+    public Meteo getLuminosite() {
         return luminosite;
     }
 
-    public void setLuminosite(double luminosite) {
+    public void setLuminosite(Meteo luminosite) {
         this.luminosite = luminosite;
     }
 
-    public int getNombre() {
+    public double getNombre() {
         return nombre;
     }
 
-    public void setNombre(int nombre) {
+    public String getNombreFormat() {
+        return format(this.getNombre(), "#");
+    }
+
+    public void setNombre(double nombre) {
         this.nombre = nombre;
     }
 
@@ -80,11 +88,11 @@ public class EtatSolaire implements Serializable {
     }
 
     public double getPuissanceSolaire() {
-        return (this.getLuminosite() / 10) * this.getPuissance();
+        return (this.getLuminosite().getLuminosite() / 10) * this.getPuissance();
     }
 
     public String getPuissanceSolaireFormat() {
-        return format(this.getPuissanceSolaire());
+        return format(this.getPuissanceSolaire(), "#.##");
     }
 
     public double getConsommationEtudiant() {
@@ -92,7 +100,7 @@ public class EtatSolaire implements Serializable {
     }
 
     public String getConsommationEtudiantFormat() {
-        return format(this.getConsommationEtudiant());
+        return format(this.getConsommationEtudiant(), "#.##");
     }
 
     public double getReste() {
@@ -114,7 +122,7 @@ public class EtatSolaire implements Serializable {
     }
 
     public String getCapaciteFormat() {
-        return format(this.getCapacite());
+        return format(this.getCapacite(), "#.##");
     }
 
     public void setCapacite(double capacite) {
@@ -126,7 +134,7 @@ public class EtatSolaire implements Serializable {
         this.details = details;
     }
 
-    public EtatSolaire(LocalTime heure, double luminosite, int nombre, double consommation, double capacite, double puissance, Secteur secteur) {
+    public EtatSolaire(LocalTime heure, Meteo luminosite, double nombre, double consommation, double capacite, double puissance, Secteur secteur) {
         this.setHeure(heure);
         this.setLuminosite(luminosite);
         this.setNombre(nombre);
@@ -145,6 +153,7 @@ public class EtatSolaire implements Serializable {
         
     }
 
+    // ! Optimisation dichotomie
     public LocalTime getHeureCoupure() {
         for (EtatSolaire etatSolaire : this.getDetails()) {
             if (etatSolaire.isCoupure())
@@ -153,8 +162,8 @@ public class EtatSolaire implements Serializable {
         return LocalTime.of(17, 00);
     }
 
-    public static String format(double number) {
-        DecimalFormat df = new DecimalFormat("#.##");
+    public static String format(double number, String pattern) {
+        DecimalFormat df = new DecimalFormat(pattern);
         df.setRoundingMode(RoundingMode.CEILING);
         return df.format(number);
     }

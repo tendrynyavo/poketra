@@ -50,6 +50,14 @@ public class Panneau extends BddObject {
         this.setConnection("PostgreSQL");
     }
 
+    public Panneau(String id, String nom, double puissance, double capacite) throws Exception {
+        this();
+        this.setId(id);
+        this.setNom(nom);
+        this.setPuissance(puissance);
+        this.setCapacite(capacite);
+    }
+
     public static double convertWmin(double watt) {
         return watt * 60;
     }

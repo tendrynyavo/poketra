@@ -44,5 +44,12 @@ public class Salle extends BddObject {
         this();
         this.setId(id);
     }
-    
+
+    public Salle(String id, String nom, Secteur secteur) throws Exception {
+        this(id);
+        this.setNom(nom);
+        this.setNombre(nombre);
+        this.setSecteur(secteur);
+    }
+
 }

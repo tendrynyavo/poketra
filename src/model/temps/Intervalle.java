@@ -71,6 +71,7 @@ public class Intervalle extends BddObject {
         return hours.compareTo(this.getDebut());
     }
 
+    // TODO Optimisation de la somme
     public Intervalle getIntervalle(Date date, Time heure) {
         for (Intervalle intervalle : this.getDetails()) {
             if (intervalle.between(date, heure)) {
@@ -103,7 +104,7 @@ public class Intervalle extends BddObject {
                 right = midlle - 1;
             }
         }
-        throw new IndexOutOfBoundsException(String.format("Pas de %s a %s à la date %s", this.getClass().getSimpleName(), heure, this.getDate()));
+        throw new IndexOutOfBoundsException(String.format("Pas de %s a %s a la date %s", this.getClass().getSimpleName(), heure, this.getDate()));
     }
 
     public Intervalle getIntervalle(String date, String time) {

@@ -17,7 +17,7 @@ public class Meteo extends Intervalle {
 
     public Meteo() throws Exception {
         super();
-        this.getColumns().get(1).setName("date_meteo");
+        this.getColumn("date").setName("date_meteo");
         this.setTable("meteo");
         this.setPrimaryKeyName("id_meteo");
         this.setConnection("PostgreSQL");
