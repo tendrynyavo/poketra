@@ -104,9 +104,7 @@ public class EtatSolaire implements Serializable {
     }
 
     public double getReste() {
-        double reste = this.getConsommationEtudiant() - this.getPuissanceSolaire();
-        if (reste < 0) reste = 0;
-        return reste;
+        return this.getPuissanceSolaire() - this.getConsommationEtudiant();
     }
 
     public boolean isCoupure() {
@@ -127,6 +125,7 @@ public class EtatSolaire implements Serializable {
 
     public void setCapacite(double capacite) {
         if (capacite < 0) capacite = 0;
+        if (capacite > this.getSecteur().getPanneau().getPuissance()) capacite = this.getSecteur().getPanneau().getPuissance();
         this.capacite = capacite;
     }
 
@@ -139,9 +138,9 @@ public class EtatSolaire implements Serializable {
         this.setLuminosite(luminosite);
         this.setNombre(nombre);
         this.setConsommation(consommation);
+        this.setSecteur(secteur);
         this.setCapacite(capacite);
         this.setPuissance(puissance);
-        this.setSecteur(secteur);
     }
 
     public EtatSolaire(int nombre, double consommation) {
@@ -156,10 +155,9 @@ public class EtatSolaire implements Serializable {
     // ! Optimisation dichotomie
     public LocalTime getHeureCoupure() {
         for (EtatSolaire etatSolaire : this.getDetails()) {
-            if (etatSolaire.isCoupure())
-                return etatSolaire.getHeure();
+            if (etatSolaire.isCoupure()) return etatSolaire.getHeure();
         }
-        return LocalTime.of(17, 00);
+        return LocalTime.of(18, 00);
     }
 
     public static String format(double number, String pattern) {

@@ -2,6 +2,8 @@ package model;
 
 import java.io.FileWriter;
 import java.sql.Connection;
+import java.sql.Date;
+
 import connection.BddObject;
 import model.etat.Coupure;
 import model.etat.CoupureComplet;
@@ -33,16 +35,17 @@ public class Test {
         //     Pointage pointage = Pointage.createPointage(connection);
         //     // System.out.println(coupures[0].getTotalNombre(pointage));
         //     // EtatSolaire etat = coupures[5].getEtatSolaire(60, 100);
-            try (FileWriter myWriter = new FileWriter("filename.txt")) {
-                for (Coupure coupure : coupures) {
+            // try (FileWriter myWriter = new FileWriter("filename.txt")) {
+            //     for (Coupure coupure : coupures) {
                     long startTime = System.currentTimeMillis();
         
-                    System.out.println(coupure.getId());
-                    System.out.println(coupure.getDate());
-                    System.out.println(coupure.getHeure());
-                    EtatSolaire etat = coupure.getEtatSolaire(60);
+                    System.out.println(coupures[0].getId());
+                    System.out.println(coupures[0].getDate());
+                    System.out.println(coupures[0].getHeure());
+                    // EtatSolaire etat = coupure.getEtatSolaire(60);
+                    EtatSolaire etat = coupures[0].getEtatSolaire(Date.valueOf("2024-01-03"), coupures[0].getMeteo(), coupures[0].getPointage(), 80, 60);
     
-                    myWriter.write(etat.getConsommationFormat() + "\n");
+                    // myWriter.write(etat.getConsommationFormat() + "\n");
                     
                     long endTime = System.currentTimeMillis();
                     
@@ -54,8 +57,8 @@ public class Test {
                         //     System.out.println(etatSolaire.getHeure() + " " + etatSolaire.getConsommationEtudiant() + " " + etatSolaire.getPuissanceSolaire() + " " + etatSolaire.getReste() + " " + etatSolaire.getCapacite() + " " + etatSolaire.isCoupure());
                         // }
                 }
-            }
-        }
+            // }
+        // }
     }
 
 }

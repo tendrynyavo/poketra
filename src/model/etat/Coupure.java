@@ -65,9 +65,6 @@ public class Coupure extends Secteur {
     }
 
     public void setHeure(Time heure) throws IllegalArgumentException {
-        LocalTime hours = heure.toLocalTime();
-        if (hours.isBefore(Time.valueOf("08:00:00").toLocalTime()) || hours.isAfter(Time.valueOf("17:00:00").toLocalTime()))
-            throw new IllegalArgumentException("Heure n'est pas comprise entre 08:00:00 et 17:00:00");
         this.heure = heure;
     }
 
@@ -91,7 +88,7 @@ public class Coupure extends Secteur {
     public Coupure() throws Exception {
         super();
         this.getColumn("date").setName("date_coupure");
-        this.setTable("coupure");
+        this.setTable("v_coupure");
         this.setPrimaryKeyName("id_secteur");
         this.setConnection("PostgreSQL");
     }
@@ -109,39 +106,84 @@ public class Coupure extends Secteur {
         this.setConsommation(double1);
     }
 
-    // ! Optimisation du code
-    public EtatSolaire getEtatSolaire(int decallage) {
-        // Initialisation de la consommation
-        double initiale = this.getConsommation();
+    // // ! Optimisation du code
+    // public EtatSolaire getEtatSolaire(int decallage) {
+    //     // Initialisation de la consommation
+    //     double initiale = this.getConsommation();
 
-        EtatSolaire etat = this.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
-        if (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) return etat;
+    //     EtatSolaire etat = this.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
+    //     if (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) return etat;
         
-        double increment = (1 / (double) 100);
+    //     double increment = (1 / (double) 100);
 
-        double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -increment : increment;
-        int millis = this.getHeure().toLocalTime().toSecondOfDay() / 60;
-        int coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
-        try {
-            while (Math.abs(millis - coupure) >= 1) {
-                this.setConsommation(this.getConsommation() + p);
-                etat = super.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
-                coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
+    //     double p = (etat.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) < 0) ? -increment : increment;
+    //     int millis = this.getHeure().toLocalTime().toSecondOfDay() / 60;
+    //     int coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
+    //     try {
+    //         while (Math.abs(millis - coupure) >= 1) {
+    //             this.setConsommation(this.getConsommation() + p);
+    //             etat = super.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), this.getConsommation(), decallage);
+    //             coupure = etat.getHeureCoupure().toSecondOfDay() / 60;
+    //         }
+    //     } catch (LimitException e) {
+    //         etat = this.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), initiale, decallage);
+    //     }
+    //     return etat;
+    // }
+
+    public EtatSolaire getEtatSolaire(int decallage) {
+        double low = 0;
+        double high = this.getPanneau().getPuissance();
+        double mid = 0;
+        EtatSolaire coupureTime = null;
+
+        while (Math.abs(high - low) >= 1e-6) {
+            mid = (low + high) / 2;
+            coupureTime = this.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), mid, decallage);
+            if (coupureTime == null || coupureTime.getHeureCoupure().isAfter(this.getHeure().toLocalTime())) {
+                low = mid;
+            } else {
+                high = mid;
             }
-        } catch (LimitException e) {
-            etat = this.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), initiale, decallage);
+
+            if (coupureTime != null && coupureTime.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) 
+                return coupureTime;
         }
-        return etat;
+        return coupureTime;
     }
     
     // ! Optimisation a la base de donnée
-    public double getMoyenne() {
+    public double getMoyenneMatin() throws Exception {
         double moyenne = 0.0;
+        Intervalle intervalle = new Intervalle();
+        intervalle.setDebut(Time.valueOf("12:00:00"));
+        intervalle.setFin(Time.valueOf("13:59:00"));
         for (Salle s : this.getSalles()) {
             double somme = 0.0;
             double nombre = 0.0;
             for (Pointage detail : (Pointage[]) this.getPointage().getDetails()) {
-                if (detail.getSalle().getId().equals(s.getId())) {
+                if (detail.getFin().toLocalTime().isBefore(Time.valueOf("12:00:00").toLocalTime()) && !intervalle.between(detail.getDebut()) && detail.getSalle().getId().equals(s.getId())) {
+                    somme += detail.getNombre();
+                    nombre++;
+                }
+            }
+            if (nombre == 0.0) throw new NullPointerException(String.format("Pas de pointage à %s a cette salle %s a %s", this.getDate(), s.getNom(), this.getDate()));
+            moyenne += somme / nombre;
+        }
+        return moyenne;
+    }
+
+    // ! Optimisation a la base de donnée
+    public double getMoyenneApresMidi() throws Exception {
+        double moyenne = 0.0;
+        Intervalle intervalle = new Intervalle();
+        intervalle.setDebut(Time.valueOf("12:00:00"));
+        intervalle.setFin(Time.valueOf("13:59:00"));
+        for (Salle s : this.getSalles()) {
+            double somme = 0.0;
+            double nombre = 0.0;
+            for (Pointage detail : (Pointage[]) this.getPointage().getDetails()) {
+                if (detail.getFin().toLocalTime().isAfter(Time.valueOf("12:00:00").toLocalTime()) && !intervalle.between(detail.getDebut()) && detail.getSalle().getId().equals(s.getId())) {
                     somme += detail.getNombre();
                     nombre++;
                 }

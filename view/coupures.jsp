@@ -45,7 +45,7 @@
                 <% for (EtatSolaire detail : etatSolaire.getDetails()) { %>
                 <tr>
                     <td><%=detail.getHeure() %></td>
-                    <td><%=detail.getLuminosite() %></td>
+                    <td><%=detail.getLuminosite().getLuminosite() %></td>
                     <td><%=detail.getNombreFormat() %></td>
                     <td><%=detail.getConsommationEtudiantFormat() %></td>
                     <td><%=detail.getPuissanceSolaireFormat() %></td>

@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import connection.BddObject;
 import model.etat.Coupure;
-import model.etat.CoupureComplet;
 import model.etat.EtatSolaire;
 import model.meteo.Meteo;
 import model.panneau.Panneau;
@@ -30,7 +29,7 @@ public class Secteur extends BddObject {
         for (Salle salle : this.getSalles()) {
             string.append(salle.getNom() + ", ");
         }
-        return string.substring(0, string.length() - 2).toString();
+        return string.substring(0, string.length() - 2);
     }
 
     public void setSalles(Salle[] salles) throws IllegalArgumentException {
@@ -75,6 +74,7 @@ public class Secteur extends BddObject {
         this.setId(id);
     }
 
+    // ! Optimisation dans la base
     public double getNombreEtudiant(Date date, Time heure, Pointage pointage) {
         double somme = 0.0;
         for (Salle s : this.getSalles()) {
@@ -90,7 +90,7 @@ public class Secteur extends BddObject {
         if (decallage < 0) 
             throw new IllegalArgumentException("Decallage invalide");
         Time hours = Time.valueOf("08:00:00");
-        EtatSolaire[] etatSolaires = new EtatSolaire[9 * decallage + 1];
+        EtatSolaire[] etatSolaires = new EtatSolaire[10 * decallage + 1];
         EtatSolaire etat = new EtatSolaire();
         double capacite = this.getPanneau().getCapacite();
         double quotient = (1 / (double) decallage);
@@ -102,12 +102,13 @@ public class Secteur extends BddObject {
             Meteo luminosite = (Meteo) meteo.getIntervalle(hours);
             
             // Nombre total du secteur
-            // ! Optimisation dans la base
             double nombre = this.getNombreEtudiant(date, hours, pointage); // TODO: Optimisation en dichotomie
             
             // Details de l'état du panneau solaire
             etatSolaires[i] = new EtatSolaire(hours.toLocalTime(), luminosite, nombre, consommation * quotient, capacite, this.getPanneau().getPuissance() * quotient, this);
-            if (!etatSolaires[i].isCoupure()) capacite -= etatSolaires[i].getReste(); // Capacite restante de la batterie
+            if (!etatSolaires[i].isCoupure()) {
+                capacite += etatSolaires[i].getReste(); // Capacite restante de la batterie
+            }
             hours = Time.valueOf(hours.toLocalTime().plusMinutes((long) (minutes))); // Ajouter une heure
         }
         etat.setConsommation(consommation);
@@ -115,20 +116,27 @@ public class Secteur extends BddObject {
         return etat;
     }
 
-    public EtatSolaire getEtatSolaire(Date date, Meteo meteo, double nombre, double consommation, int decallage) throws Exception {
+    public EtatSolaire getEtatSolaire(Date date, Meteo meteo, EtatSolaireMoyenne moyenne, int decallage) throws Exception {
         Pointage pointage = new Pointage();
         pointage.setDate(date);
-        Pointage[] pointages = new Pointage[this.getSalles().length];
-        for (int i = 0; i < pointages.length; i++) {
-            pointages[i] = new Pointage(date, Time.valueOf("8:00:00"), Time.valueOf("17:00:00"), this.getSalles()[i], nombre / this.getSalles().length);
+        Pointage[] pointages = new Pointage[this.getSalles().length * moyenne.getPointages().length];
+        int increment = 0;
+        for (Pointage p : moyenne.getPointages()) {
+            for (Salle salle : this.getSalles()) {
+                p.setSalle(salle);
+                p.setNombre(p.getNombre() / this.getSalles().length);
+                pointages[increment] = p;
+                increment++;
+            }
         }
         pointage.setDetails(pointages);
-        return this.getEtatSolaire(date, meteo, pointage, consommation, decallage);
+        return this.getEtatSolaire(date, meteo, pointage, moyenne.getConsommation(), decallage);
     }
 
-    public EtatSolaire getMoyenneEtatSolaire(Date date, Connection connection) throws Exception {
+    public EtatSolaireMoyenne getMoyenneEtatSolaire(Date date, Connection connection) throws Exception {
         double consommation = 0.0;
-        double nombre = 0.0;
+        double matin = 0.0;
+        double apresMidi = 0.0;
         double temp = 0.0;
         EtatSolaire etat = null;
 
@@ -142,13 +150,23 @@ public class Secteur extends BddObject {
             etat = coupure.getEtatSolaire(60);
             consommation += etat.getConsommation();
 
+            // ! Optimisation à la base de donnée
             if (date.compareTo(coupure.getDate()) != 0 && coupure.getDate().toLocalDate().getDayOfWeek() == date.toLocalDate().getDayOfWeek()) {
-                nombre += coupure.getMoyenne();
+                apresMidi += coupure.getMoyenneApresMidi();
+                matin += coupure.getMoyenneMatin();
                 temp++;
             }
         }
         if (temp == 0) throw new IllegalArgumentException(String.format("Pas de donnee a ce jour %s pour le %s", date.toLocalDate().getDayOfWeek().toString(), this.getNom()));
-        return new EtatSolaire((int) Math.round(nombre / temp), consommation / coupures.length);
+        EtatSolaireMoyenne moyenne = new EtatSolaireMoyenne();
+        moyenne.setConsommation(consommation / coupures.length);
+        Pointage[] pointages = new Pointage[] {
+            new Pointage(date, Time.valueOf("8:00:00"), Time.valueOf("11:59:00"), null, (int) Math.round(matin / temp)),
+            new Pointage(date, Time.valueOf("12:00:00"), Time.valueOf("13:59:00"), null, 0.0),
+            new Pointage(date, Time.valueOf("13:00:00"), Time.valueOf("18:00:00"), null, (int) Math.round(apresMidi / temp)),
+        };
+        moyenne.setPointages(pointages);
+        return moyenne;
     }
 
     public Coupure predir(String date, int decallage, Connection connection) throws Exception {
@@ -161,15 +179,15 @@ public class Secteur extends BddObject {
         
         // TODO: Possible Optimisation de nombre moyenne dans la base
         // Prendre la moyenne de consommation et la moyenne de nombre étudiant
-        EtatSolaire moyenne = this.getMoyenneEtatSolaire(c.getDate(), connection);
+        EtatSolaireMoyenne moyenne = this.getMoyenneEtatSolaire(c.getDate(), connection);
 
         // Prendre la meteo à cette date
         // ! Request
         Meteo meteo = (Meteo) Intervalle.createIntervalle(c.getDate(), connection, new Meteo());
         
         // Prediction de l'etat du panneau solaire
-        EtatSolaire etat = this.getEtatSolaire(c.getDate(), meteo, moyenne.getNombre(), moyenne.getConsommation(), decallage);
-        EtatSolaire minute = this.getEtatSolaire(c.getDate(), meteo, moyenne.getNombre(), moyenne.getConsommation(), 60);
+        EtatSolaire etat = this.getEtatSolaire(c.getDate(), meteo, moyenne, decallage);
+        EtatSolaire minute = this.getEtatSolaire(c.getDate(), meteo, moyenne, 60);
         c.setEtat(etat);
         c.setHeure(Time.valueOf(minute.getHeureCoupure()));
         return c;
@@ -177,7 +195,7 @@ public class Secteur extends BddObject {
 
     // TODO Optimisation Base de donnée
     public Coupure[] getCoupures(Connection connection) throws Exception {
-        Coupure c = new CoupureComplet();
+        Coupure c = new Coupure();
         c.setId(this.getId());
         // ! Request
         Coupure[] coupures = (Coupure[]) c.findAll(connection, null);
