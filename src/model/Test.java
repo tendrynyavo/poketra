@@ -1,9 +1,7 @@
 package model;
 
-import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.Date;
-
 import connection.BddObject;
 import model.etat.Coupure;
 import model.etat.CoupureComplet;

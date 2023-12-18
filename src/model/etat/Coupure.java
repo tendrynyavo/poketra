@@ -137,17 +137,18 @@ public class Coupure extends Secteur {
         double mid = 0;
         EtatSolaire coupureTime = null;
 
-        while (Math.abs(high - low) >= 1e-6) {
+        while (high - low >= 1e-6) {
             mid = (low + high) / 2;
             coupureTime = this.getEtatSolaire(this.getDate(), this.getMeteo(), this.getPointage(), mid, decallage);
+            
+            if (coupureTime != null && coupureTime.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) 
+                return coupureTime;
+
             if (coupureTime == null || coupureTime.getHeureCoupure().isAfter(this.getHeure().toLocalTime())) {
                 low = mid;
             } else {
                 high = mid;
             }
-
-            if (coupureTime != null && coupureTime.getHeureCoupure().compareTo(this.getHeure().toLocalTime()) == 0) 
-                return coupureTime;
         }
         return coupureTime;
     }

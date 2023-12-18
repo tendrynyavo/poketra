@@ -1,7 +1,7 @@
 <%@page import="model.etat.Coupure" %>
 <%@page import="model.etat.EtatSolaire" %>
 <%@page import="model.secteur.Secteur" %>
-<%-- <%@page errorPage="./index.jsp" %> --%>
+<%@page errorPage="./index.jsp" %>
 <%
     Coupure coupure = Secteur.predir(request.getParameter("secteur"), request.getParameter("date"), request.getParameter("decallage"));
     EtatSolaire etatSolaire = coupure.getEtat();
