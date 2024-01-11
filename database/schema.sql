@@ -1,52 +1,43 @@
-CREATE TABLE Meteo(
-   id_meteo VARCHAR(50) ,
-   date_meteo DATE NOT NULL,
-   debut TIME NOT NULL,
-   fin TIME,
-   luminosite INTEGER NOT NULL,
-   PRIMARY KEY(id_meteo)
+CREATE TABLE look (
+   id_look SERIAL PRIMARY KEY,
+   nom VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Panneau(
-   id_panneau VARCHAR(50) ,
-   nom VARCHAR(100)  NOT NULL,
-   capacite DOUBLE PRECISION NOT NULL,
-   puissance DOUBLE PRECISION NOT NULL,
-   PRIMARY KEY(id_panneau)
+CREATE TABLE matiere (
+   id_matiere VARCHAR(10) PRIMARY KEY,
+   nom VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Secteur(
-   id_secteur VARCHAR(50) ,
-   nom VARCHAR(100)  NOT NULL,
-   id_panneau VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_secteur),
-   FOREIGN KEY(id_panneau) REFERENCES Panneau(id_panneau)
+CREATE TABLE look_matiere (
+   id SERIAL PRIMARY KEY,
+   id_look INT REFERENCES look(id_look),
+   id_matiere INT REFERENCES matiere(id_matiere)
 );
 
-CREATE TABLE Salle(
-   id_salle VARCHAR(50) ,
-   nom VARCHAR(100)  NOT NULL,
-   id_secteur VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_salle),
-   FOREIGN KEY(id_secteur) REFERENCES Secteur(id_secteur)
-);
+INSERT INTO look(nom) VALUES 
+('Debraille');
 
-CREATE TABLE Coupure(
-   id_coupure VARCHAR(50) ,
-   heure TIME,
-   date_coupure DATE,
-   id_secteur VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_coupure),
-   FOREIGN KEY(id_secteur) REFERENCES Secteur(id_secteur)
-);
+INSERT INTO matiere(id_matiere,nom) VALUES
+('MAT001','Cuir'),
+('MAT002','Coton'),
+('MAT003','Soga'),
+('MAT004','Lin');
 
-CREATE TABLE Pointage(
-   id_pointage VARCHAR(50) ,
-   date_pointage DATE,
-   debut TIME,
-   fin TIME,
-   nombre INTEGER NOT NULL,
-   id_salle VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_pointage),
-   FOREIGN KEY(id_salle) REFERENCES Salle(id_salle)
-);
+INSERT INTO look_matiere(id_look, id_matiere) VALUES
+(1,1),
+(1,2),
+(2,2),
+(3,4);
+
+CREATE VIEW v_look_matiere AS 
+SELECT id,look.id_look,look.nom as look,matiere.id_matiere,matiere.nom as matiere
+FROM look_matiere 
+JOIN matiere ON matiere.id_matiere = look_matiere.id_matiere
+JOIN look ON look.id_look = look_matiere.id_look;
+
+ALTER TABLE matiere ADD COLUMN prix_unitaire DOUBLE PRECISION DEFAULT 0;
+
+UPDATE matiere SET prix_unitaire = 1000;
+
+INSERT INTO format VALUES(1,'PM');
+INSERT INTO format VALUES(2,'GM');

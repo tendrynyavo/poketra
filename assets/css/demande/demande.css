@@ -1,0 +1,67 @@
+.active-item {
+    background-color: #93c944;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item {
+    background-color: #3e4940;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rounded-sidebar {
+    border-radius: 45px;
+}
+
+.rounded-container {
+    border-radius: 30px;
+}
+
+.rounded-container-detail {
+    border-radius: 30px;
+    background: rgb(53,63,55);
+    background: linear-gradient(90deg, rgba(53,63,55,1) 0%, rgba(51,72,55,1) 23%, rgba(60,103,66,1) 100%);
+}
+
+.form-control:focus {
+    border-color: #9ec759;
+    box-shadow: 0 0 0 0.25rem rgba(159, 199, 89, 0.248);
+}
+
+.form-select:focus {
+    border-color: #9ec759;
+    box-shadow: 0 0 0 0.25rem rgba(159, 199, 89, 0.248);
+}
+
+.btn {
+    background-color: #93c944;
+    border-color: #93c944;
+    color: white;
+    border-radius: 10px;
+}
+
+.btn:hover {
+    color: white;
+}
+
+.btn:focus {
+    border-color: #9ec759;
+    box-shadow: 0 0 0 0.25rem rgba(159, 199, 89, 0.248);
+}
+
+.description {
+    height: 172px;
+    overflow-y: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.description::-webkit-scrollbar {
+    display: none;
+  }

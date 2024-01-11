@@ -31,6 +31,7 @@ del "sources.txt"
 
 @REM @REM Convert into .war
 cd target
-jar -cvf "gestion-solaire.war" *
-move "gestion-solaire.war" "%TOMCAT_PATH%\webapps"
+jar -cvf "poketra.war" *
+move "poketra.war" "%TOMCAT_PATH%\webapps"
+@REM scp ./poketra.war tendry@172.20.3.105:~/apache-tomcat-10.0.27/webapps
 cd ..
