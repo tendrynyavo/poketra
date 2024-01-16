@@ -53,8 +53,4 @@ public class Quantite extends BddObject {
             this.quantite = quantite;
         }
     }
-
-    public void setQuantite(String prix) throws NumberFormatException, Exception {
-        this.setQuantite(Double.parseDouble(prix));
-    }
 }

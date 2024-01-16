@@ -10,6 +10,8 @@ import java.util.List;
 import connection.BddObject;
 import model.matiere.*;
 
+import static connexion.ConnexionToDatabase.*;
+
 public class Look extends BddObject{
     String nom;
 

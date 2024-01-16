@@ -2,11 +2,12 @@ package model.insert;
 
 import connection.BddObject;
 
-public class Format extends BddObject {
+public class Format extends BddObject{
 
     String nom;
     
-    public Format() throws Exception{
+    public Format() throws Exception {
+        super();
         this.setTable("Format");
         this.setPrimaryKeyName("id_format");
         this.setConnection("PostgreSQL");
@@ -21,10 +22,5 @@ public class Format extends BddObject {
 
     public void setNom(String nom) {
         this.nom = nom;
-    }
-
-    @Override
-    public String toString() {
-        return this.getNom();
     }
 }

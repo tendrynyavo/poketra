@@ -4,7 +4,6 @@ import connection.BddObject;
 
 public class Filtre extends BddObject {
 
-    
     String min;
     String max;
     

@@ -3,36 +3,56 @@ package model.matiere;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import connection.BddObject;
-import connection.annotation.ColumnName;
+import model.insert.Format;
+import model.insert.Product;
 import model.insert.Quantite;
 
-public class Matiere extends BddObject{
-    
-    String nom;
-    @ColumnName("prix_unitaire")
-    Double prix;
+public class Matiere extends BddObject {
 
-    public Double getPrix() {
-        return prix;
-    }
-
-    public void setPrix(Double prix) {
-        if (prix < 0) 
-            throw new IllegalArgumentException("Prix est négatif");
-        this.prix = prix;
-    }
-
-    public void setPrix(String prix) {
-        this.setPrix(Double.parseDouble(prix));
-    }
+    Product produit;
+    Format format;
+    String  nom;
+    double quantite;
 
     public Matiere() throws Exception {
+        super();
         this.setTable("matiere");
         this.setPrimaryKeyName("id_matiere");
         this.setConnection("PostgreSQL");
-        this.setFunctionPK("nextval('seq_matiere')");
-        this.setPrefix("MAT");
-        this.setCountPK(7);
+    }
+
+    public Format getFormat() {
+        return this.format;
+    }
+
+    public void setFormat(Format format) {
+        this.format = format;
+    }
+
+    public Product getProduit() {
+        return this.produit;
+    }
+
+    public void setProduit(Product produit) {
+        this.produit = produit;
+    }
+
+    public Double getQuantite() {
+        return this.quantite;
+    }
+
+    public void setQuantite(String quantite) throws NumberFormatException, Exception {
+        if (quantite.isEmpty()) {
+            throw new Exception("La valeur insérée est nulle");
+        }
+        setQuantite(Double.valueOf(quantite));
+    }
+
+    public void setQuantite(double quantite) throws Exception {
+        if (quantite < 0) {
+            throw new Exception("La valeur insérée est négative");
+        } 
+        this.quantite = quantite;
     }
 
     public Matiere(String id) throws Exception {
@@ -78,11 +98,6 @@ public class Matiere extends BddObject{
                 connection.close();
             }
         }
-    }
-
-    @Override
-    public String toString() {
-        return this.getNom();
     }
 
     public static void main(String[] args) throws Exception {
