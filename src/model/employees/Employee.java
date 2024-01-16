@@ -2,14 +2,14 @@ package model.employees;
 
 import connection.BddObject;
 
-public class Employees extends BddObject{
+public class Employee extends BddObject{
     String nom;
-    Categories categories;
+    Categorie categories;
 
-    public Employees() throws Exception{
+    public Employee() throws Exception{
         super();
         this.setTable("Employees");
-        this.setPrimaryKeyName("id_employe");
+        this.setPrimaryKeyName("id_employee");
         this.setConnection("PostgreSQL");
         this.setFunctionPK("nextval('empl_seq')");
         this.setCountPK(5);
@@ -19,13 +19,13 @@ public class Employees extends BddObject{
     public String getNom() {
         return nom;
     }
-    public Categories getCategories() {
+    public Categorie getCategories() {
         return categories;
     }
     public void setNom(String nom) {
         this.nom = nom;
     }
-    public void setCategories(Categories categories) {
+    public void setCategories(Categorie categories) {
         this.categories = categories;
     }
 

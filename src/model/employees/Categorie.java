@@ -2,13 +2,13 @@ package model.employees;
 
 import connection.BddObject;
 
-public class Categories extends BddObject {
+public class Categorie extends BddObject {
     String nom;
-    double prix;
+    double salaire;
 
-    public Categories() throws Exception{
+    public Categorie() throws Exception{
         this.setTable("Categories");
-        this.setPrimaryKeyName("id_categories");
+        this.setPrimaryKeyName("id_categorie");
         this.setConnection("PostgreSQL");
         this.setFunctionPK("nextval('cat_seq')");
         this.setCountPK(5);
@@ -19,13 +19,13 @@ public class Categories extends BddObject {
         return nom;
     }
     public double getPrix() {
-        return prix;
+        return salaire;
     }
     public void setNom(String nom) {
         this.nom = nom;
     }
     public void setPrix(double prix) {
-        this.prix = prix;
+        this.salaire = prix;
     }
 
     

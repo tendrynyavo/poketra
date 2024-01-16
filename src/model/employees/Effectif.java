@@ -13,14 +13,14 @@ public class Effectif extends BddObject{
         this.setPrefix("EFF");
     }
    
-    Categories categorie;
+    Categorie categorie;
     Product produit;
     int nom;
 
-    public Categories getCategorie() {
+    public Categorie getCategorie() {
         return categorie;
     }
-    public void setCategorie(Categories categorie) {
+    public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
     }
     public Product getProduit() {
