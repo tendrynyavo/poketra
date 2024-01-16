@@ -1,6 +1,10 @@
 package model.employees;
 
+import java.sql.Connection;
+
 import connection.BddObject;
+import connection.Column;
+import model.insert.Format;
 import model.insert.Product;
 
 public class Effectif extends BddObject{
@@ -15,7 +19,15 @@ public class Effectif extends BddObject{
    
     Categorie categorie;
     Product produit;
-    int nom;
+    Format format;
+    int nombre;
+    
+    public Format getFormat() {
+        return format;
+    }
+    public void setFormat(Format format) {
+        this.format = format;
+    }
 
     public Categorie getCategorie() {
         return categorie;
@@ -29,12 +41,18 @@ public class Effectif extends BddObject{
     public void setProduit(Product produit) {
         this.produit = produit;
     }
-    public int getNom() {
-        return nom;
+    public int getNombre() {
+        return nombre;
     }
-    public void setNom(int nom) {
-        this.nom = nom;
+    public void setNombre(int nom) {
+        this.nombre = nom;
     }
 
-    
+    public void insert(Connection connection, Column... columns) throws Exception{
+        if (format.getId().equals("2")) {
+            setNombre(nombre * 2);
+        }
+
+        super.insert(connection, columns);
+    }
 }
