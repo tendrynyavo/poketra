@@ -16,6 +16,14 @@ CREATE TABLE effectifs(
     nombre INT DEFAULT 0
 );
 
+CREATE TABLE produit_format_prix(
+    id_produit VARCHAR(10) REFERENCES produit(id_produit),
+    id_format VARCHAR(10) REFERENCES format(id_format),
+    prix_de_vente DOUBLE PRECISION
+);
+
+ALTER TABLE produit ADD COLUMN prix_de_vente
+
 CREATE SEQUENCE empl_seq;
 CREATE SEQUENCE cat_seq;
 CREATE SEQUENCE eff_seq;
