@@ -21,5 +21,9 @@ public class ListeProduitBenefice extends Product {
     public Double getBenefice() {
         return getDepence() - getPrixDeVente();
     }
+
+    public ListeProduitBenefice[] getListeProduitBeneficesRange(String min, String max) {
+        return null;
+    }
     
 }
