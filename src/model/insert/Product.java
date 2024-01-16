@@ -12,7 +12,7 @@ public class Product extends BddObject {
 
     String nom;
     Format format;
-    Time duree;
+    int duree;
     Double prixDeVente;
     
     public Product() throws Exception {
@@ -33,11 +33,11 @@ public class Product extends BddObject {
         return prixDeVente;
     }
 
-    public Time getDuree() {
+    public int getDuree() {
         return duree;
     }
 
-    public void setDuree(Time duree) {
+    public void setDuree(int duree) {
         this.duree = duree;
     }
 
