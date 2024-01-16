@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 import connection.BddObject;
 import connection.Column;
+import connexion.ConnexionToDatabase;
 import model.insert.Format;
 import model.insert.Product;
 
@@ -48,11 +49,38 @@ public class Effectif extends BddObject{
         this.nombre = nom;
     }
 
-    public void insert(Connection connection, Column... columns) throws Exception{
-        if (format.getId().equals("2")) {
-            setNombre(nombre * 2);
-        }
+    public void insertEffectif() throws Exception {
+        Connection connection = null;
+        try {
+            connection = ConnexionToDatabase.getConnection();
+            Effectif[] effectifs = new Effectif[2];
+    
+            effectifs[0] = new Effectif();
+    
+            effectifs[0].setCategorie(this.getCategorie());
+            effectifs[0].setProduit(this.getProduit());
+            effectifs[0].setNombre(nombre);
+            Format foo0 = new Format();
+            foo0.setId("1");
+            effectifs[0].setFormat(foo0);
+    
+            effectifs[1].setCategorie(this.getCategorie());
+            effectifs[1].setProduit(this.getProduit());
+            effectifs[1].setNombre(nombre * 2);
+            Format foo1 = new Format();
+            foo1.setId("2");
+            effectifs[1].setFormat(foo1);
+    
+            for (Effectif effectif : effectifs) {
+                effectif.insert(connection);
+            }
 
-        super.insert(connection, columns);
+            connection.commit();
+        } catch (Exception e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.close();
+        }
     }
 }
