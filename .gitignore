@@ -1,5 +1,6 @@
 *.class
-# compile.bat
+compile.bat
 target
 config.xml
 node_module
+/.vscode

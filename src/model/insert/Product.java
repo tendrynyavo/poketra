@@ -1,6 +1,8 @@
 package model.insert;
 
 import java.sql.Connection;
+import java.sql.Time;
+
 import connection.BddObject;
 import model.matiere.Matiere;
 import model.mouvement.EtatStock;
@@ -10,6 +12,8 @@ public class Product extends BddObject {
 
     String nom;
     Format format;
+    Time duree;
+    Double prixDeVente;
     
     public Product() throws Exception {
         super();
@@ -19,6 +23,22 @@ public class Product extends BddObject {
         this.setFunctionPK("nextval('seq_produit')");
         this.setCountPK(5);
         this.setPrefix("PRO");
+    }
+
+    public void setPrixDeVente(Double prixDeVente) {
+        this.prixDeVente = prixDeVente;
+    }
+
+    public Double getPrixDeVente() {
+        return prixDeVente;
+    }
+
+    public Time getDuree() {
+        return duree;
+    }
+
+    public void setDuree(Time duree) {
+        this.duree = duree;
     }
 
     public Format getFormat() {

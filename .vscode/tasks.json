@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CompileTomcatProgram",
+            "label": "BuildProgram",
             "type": "shell",
             "command": "cmd",
             "args": [
