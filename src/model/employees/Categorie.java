@@ -3,8 +3,26 @@ package model.employees;
 import connection.BddObject;
 
 public class Categorie extends BddObject {
+    
     String nom;
-    double salaire;
+    Double salaire;
+
+    public Double getSalaire() {
+        return salaire;
+    }
+
+    public void setSalaire(Double salaire) {
+        if (salaire < 0) {
+            throw new IllegalArgumentException("Salaire est négatif");
+        }
+        this.salaire = salaire;
+    }
+
+    public void setSalaire(String salaire) {
+        if (salaire.isEmpty())
+            throw new IllegalArgumentException("Salaire est vide");
+        this.setSalaire(Double.parseDouble(salaire));
+    }
 
     public Categorie() throws Exception{
         this.setTable("Categories");
@@ -24,9 +42,10 @@ public class Categorie extends BddObject {
     public void setNom(String nom) {
         this.nom = nom;
     }
-    public void setPrix(double prix) {
-        this.salaire = prix;
-    }
 
+    @Override
+    public String toString() {
+        return this.getNom();
+    }
     
 }

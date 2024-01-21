@@ -23,4 +23,9 @@ public class Format extends BddObject{
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+    @Override
+    public String toString() {
+        return this.getNom();
+    }
 }

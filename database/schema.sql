@@ -13,6 +13,7 @@ CREATE TABLE effectifs(
     id_effectif VARCHAR(10) PRIMARY KEY,
     id_categorie VARCHAR(10) REFERENCES categories(id_categorie),
     id_produit VARCHAR(10) REFERENCES produit(id_produit),
+    id_format VARCHAR(10) REFERENCES format(id_format),
     nombre INT DEFAULT 0
 );
 

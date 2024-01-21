@@ -3,6 +3,8 @@
 <%
 
     Formulaire formulaire = new Product().createFormulaire("insert");
+    formulaire.getListeChamp()[3].setVisible(false);
+    formulaire.getListeChamp()[1].setVisible(false);
     formulaire.setTitle("Insertion de Produit");
     formulaire.setRedirect("/poketra/Product.jsp");
     formulaire.setRedirectError("/poketra/Product.jsp?error=");

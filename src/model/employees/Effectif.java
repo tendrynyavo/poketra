@@ -1,16 +1,13 @@
 package model.employees;
 
-import java.sql.Connection;
-
 import connection.BddObject;
-import connection.Column;
-import connexion.ConnexionToDatabase;
 import model.insert.Format;
 import model.insert.Product;
 
 public class Effectif extends BddObject{
+
     public Effectif() throws Exception {
-        this.setTable("Effectif");
+        this.setTable("Effectifs");
         this.setPrimaryKeyName("id_effectif");
         this.setConnection("PostgreSQL");
         this.setFunctionPK("nextval('eff_seq')");
@@ -21,13 +18,31 @@ public class Effectif extends BddObject{
     Categorie categorie;
     Product produit;
     Format format;
-    int nombre;
+    Integer nombre;
     
     public Format getFormat() {
         return format;
     }
     public void setFormat(Format format) {
         this.format = format;
+    }
+
+    public void setFormat(String format) throws Exception {
+        Format f = new Format();
+        f.setId(format);
+        this.format = f;
+    }
+
+    public void setProduit(String format) throws Exception {
+        Product f = new Product();
+        f.setId(format);
+        this.produit = f;
+    }
+
+    public void setCategorie(String format) throws Exception {
+        Categorie f = new Categorie();
+        f.setId(format);
+        this.categorie = f;
     }
 
     public Categorie getCategorie() {
@@ -42,45 +57,20 @@ public class Effectif extends BddObject{
     public void setProduit(Product produit) {
         this.produit = produit;
     }
-    public int getNombre() {
+    public Integer getNombre() {
         return nombre;
     }
-    public void setNombre(int nom) {
-        this.nombre = nom;
+    public void setNombre(Integer nombre) {
+        if (nombre < 0)
+            throw new IllegalArgumentException("Nombre est négatif");
+        this.nombre = nombre;
     }
 
-    public void insertEffectif() throws Exception {
-        Connection connection = null;
-        try {
-            connection = ConnexionToDatabase.getConnection();
-            Effectif[] effectifs = new Effectif[2];
-    
-            effectifs[0] = new Effectif();
-    
-            effectifs[0].setCategorie(this.getCategorie());
-            effectifs[0].setProduit(this.getProduit());
-            effectifs[0].setNombre(nombre);
-            Format foo0 = new Format();
-            foo0.setId("1");
-            effectifs[0].setFormat(foo0);
-    
-            effectifs[1].setCategorie(this.getCategorie());
-            effectifs[1].setProduit(this.getProduit());
-            effectifs[1].setNombre(nombre * 2);
-            Format foo1 = new Format();
-            foo1.setId("2");
-            effectifs[1].setFormat(foo1);
-    
-            for (Effectif effectif : effectifs) {
-                effectif.insert(connection);
-            }
-
-            connection.commit();
-        } catch (Exception e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            connection.close();
-        }
+    public void setNombre(String nombre) {
+        if (nombre.isEmpty())
+            throw new IllegalArgumentException("Nombre est vide");
+        this.setNombre(Integer.parseInt(nombre));
     }
+
+    
 }
