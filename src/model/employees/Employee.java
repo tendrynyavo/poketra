@@ -12,6 +12,7 @@ public class Employee extends BddObject{
     Date date;
     String poste;
     int anciennete;
+    String categorie;
 
     public Employee() throws Exception{
         super();
@@ -22,6 +23,8 @@ public class Employee extends BddObject{
         this.setCountPK(5);
         this.setPrefix("EMP");
     }
+
+    
 
     public Double getTauxHoraire() {
         return tauxHoraire;
@@ -77,5 +80,15 @@ public class Employee extends BddObject{
             System.out.println(employee.getAnciennete());
             System.out.println(employee.getTauxHoraire());
         }
+    }
+
+
+
+    public String getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
     }
 }

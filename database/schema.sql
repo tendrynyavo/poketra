@@ -39,3 +39,4 @@ CREATE TABLE experience(
 );
 ALTER TABLE experience ALTER COLUMN fin TYPE NUMERIC;
 CREATE SEQUENCE exp_seq;
+ALTER TABLE employees ADD COLUMN id_categorie VARCHAR(50) REFERENCES categories(id_categorie);
