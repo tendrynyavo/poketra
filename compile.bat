@@ -1,4 +1,4 @@
-set TOMCAT_PATH=C:\Program Files\Apache Software Foundation\Tomcat 10.1
+set TOMCAT_PATH=D:\Server-local\Tomcat-10.1
 
 if exist "target" (
     rmdir /s /q .\target

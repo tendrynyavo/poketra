@@ -3,6 +3,9 @@
 <%
 
     Formulaire formulaire = new Matiere().createFormulaire("insert");
+    formulaire.getListeChamp()[1].setVisible(false);
+    formulaire.getListeChamp()[3].setVisible(false);
+    formulaire.getListeChamp()[0].setVisible(false);
     formulaire.setTitle("Insertion de Matiere");
     formulaire.setRedirect("/poketra/Matiere.jsp");
     formulaire.setRedirectError("/poketra/Matiere.jsp?error=");

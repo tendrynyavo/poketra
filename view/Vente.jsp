@@ -1,11 +1,11 @@
 <%@page import="formulaire.Formulaire"%>
-<%@page import="model.insert.Quantite"%>
+<%@page import="model.prix.Vente"%>
 <%
 
-    Formulaire formulaire = new Quantite().createFormulaire("insert");
-    formulaire.setTitle("Insertion de Quantite");
-    formulaire.setRedirect("/poketra/Quantite.jsp");
-    formulaire.setRedirectError("/poketra/Quantite.jsp?error=");
+    Formulaire formulaire = new Vente().createFormulaire("insert");
+    formulaire.setTitle("Insertion de Vente");
+    formulaire.setRedirect("/poketra/Vente.jsp");
+    formulaire.setRedirectError("/poketra/Vente.jsp?error=");
     String error = (request.getParameter("error") == null) ? "" : request.getParameter("error");
     formulaire.setError(error);
 
@@ -25,7 +25,7 @@
 <body>
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
-
+            
             <jsp:include page="./header.html" />
 
             <div class="col-sm p-3 min-vh-100">

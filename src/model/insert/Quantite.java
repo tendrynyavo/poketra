@@ -4,18 +4,18 @@ import connection.BddObject;
 import model.matiere.Matiere;
 
 public class Quantite extends BddObject {
+
     Product product;
     Format format;
     Matiere matiere;
     double quantite;
     
     public Quantite() throws Exception{
+        super();
         this.setTable("Quantite");
         this.setPrimaryKeyName("id_quantite");
         this.setConnection("PostgreSQL");
-        this.setFunctionPK("nextval('seq_quantite')");
-        this.setCountPK(5);
-        this.setPrefix("Qua");
+        this.setSerial(false);
     }
 
     public Product getProduct() {
@@ -32,6 +32,24 @@ public class Quantite extends BddObject {
 
     public void setFormat(Format format) {
         this.format = format;
+    }
+
+    public void setFormat(String format) throws Exception {
+        Format f = new Format();
+        f.setId(format);
+        this.format = f;
+    }
+
+    public void setProduct(String format) throws Exception {
+        Product f = new Product();
+        f.setId(format);
+        this.product = f;
+    }
+
+    public void setMatiere(String format) throws Exception {
+        Matiere f = new Matiere();
+        f.setId(format);
+        this.matiere = f;
     }
 
     public Matiere getMatiere() {
@@ -53,4 +71,9 @@ public class Quantite extends BddObject {
             this.quantite = quantite;
         }
     }
+
+    public void setQuantite(String quantite) throws Exception {
+        this.setQuantite(Double.parseDouble(quantite));
+    }
+    
 }

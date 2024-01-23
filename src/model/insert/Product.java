@@ -1,9 +1,8 @@
 package model.insert;
 
 import java.sql.Connection;
-import java.sql.Time;
-
 import connection.BddObject;
+import connection.annotation.ColumnName;
 import model.matiere.Matiere;
 import model.mouvement.EtatStock;
 import model.mouvement.Mouvement;
@@ -13,6 +12,7 @@ public class Product extends BddObject {
     String nom;
     Format format;
     int duree;
+    @ColumnName("prix_de_vente")
     Double prixDeVente;
     
     public Product() throws Exception {
@@ -29,6 +29,10 @@ public class Product extends BddObject {
         this.prixDeVente = prixDeVente;
     }
 
+    public void setPrixDeVente(String prixDeVente) {
+        this.setPrixDeVente(Double.parseDouble(prixDeVente));
+    }
+
     public Double getPrixDeVente() {
         return prixDeVente;
     }
@@ -41,12 +45,22 @@ public class Product extends BddObject {
         this.duree = duree;
     }
 
+    public void setDuree(String duree) {
+        this.setDuree(Integer.parseInt(duree));
+    }
+
     public Format getFormat() {
         return this.format;
     }
 
     public void setFormat(Format format) {
         this.format = format;
+    }
+
+    public void setFormat(String format) throws Exception {
+        Format f = new Format();
+        f.setId(format);
+        this.format = f;
     }
 
     public String getNom() {
@@ -107,6 +121,11 @@ public class Product extends BddObject {
             }
         }
         return mouvements;
+    }
+
+    @Override
+    public String toString() {
+        return this.getNom();
     }
 
 }
