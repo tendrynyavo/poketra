@@ -11,3 +11,7 @@ UPDATE produit SET duree = ROUND(CAST(RANDOM() * (5) + 10 AS NUMERIC)) WHERE id_
 UPDATE produit SET duree = ROUND(CAST(RANDOM() * (5) + 10 AS NUMERIC)) WHERE id_produit = 'PRO3';
 UPDATE produit SET duree = ROUND(CAST(RANDOM() * (5) + 10 AS NUMERIC)) WHERE id_produit = 'PRO4';
 UPDATE categories SET salaire = ROUND(CAST(RANDOM() * (20) + 5 AS NUMERIC)) WHERE id_categorie = 'CAT2';
+INSERT INTO employees VALUES('EMP01','JACK','DIEUDONNE','2021-01-23',20);
+INSERT INTO experience(id_experience,debut,fin,augmentation) VALUES('EXP01',0,2,1);
+INSERT INTO experience VALUES('EXP02','senior',2,3,2);
+INSERT INTO experience VALUES('EXP03','expert',3,'Infinity',3);

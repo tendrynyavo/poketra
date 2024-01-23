@@ -1,6 +1,9 @@
 CREATE TABLE employees(
     id_employee VARCHAR(10) PRIMARY KEY,
-    nom VARCHAR(255)
+    nom VARCHAR(255),
+    prenom VARCHAR(255),
+    date DATE,
+    taux_horaire DOUBLE PRECISION
 );
 CREATE TABLE categories(
     id_categorie VARCHAR(10) PRIMARY KEY,
@@ -27,3 +30,11 @@ SELECT id_produit, id_format, prix, (prix * 1.5) AS prix_final, ((prix * 1.5) - 
 SELECT * FROM produit;
 ALTER TABLE quantite ADD COLUMN id_quantite VARCHAR(10) PRIMARY KEY;
 CREATE SEQUENCE seq_quantite;
+CREATE TABLE experience(
+    id_experience VARCHAR(50) PRIMARY KEY,
+    designation VARCHAR(255),
+    debut INTEGER,
+    fin INTEGER,
+    augmentation DOUBLE PRECISION
+);
+ALTER TABLE experience ALTER COLUMN fin TYPE NUMERIC;

@@ -68,3 +68,17 @@ JOIN
 ON
     pe.id_produit = pp.id_produit AND
     pe.id_format = pp.id_format;
+
+SELECT
+    e.id_employee,
+    e.nom,
+    e.prenom,
+    exp.designation AS poste,
+    EXTRACT(YEAR FROM AGE(NOW(),e.date)) AS anciennete,
+    (e.taux_horaire * anciennete) AS taux_horaire
+FROM
+    employees e
+JOIN
+    experience exp
+ON
+    EXTRACT(YEAR FROM AGE(NOW(),e.date)) BETWEEN debut AND fin;
