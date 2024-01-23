@@ -75,7 +75,8 @@ WITH data AS (
         e.nom,
         e.prenom,
         EXTRACT(YEAR FROM AGE(NOW(),e.date)) AS anciennete,
-        e.taux_horaire
+        e.taux_horaire,
+        e.id_categorie
     FROM
         employees e
 )
@@ -83,6 +84,7 @@ SELECT
     d.id_employee,
     d.nom,
     d.prenom,
+    d.id_categorie,
     exp.designation AS poste,
     d.anciennete,
     (d.taux_horaire * anciennete) AS taux_horaire
