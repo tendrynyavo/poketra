@@ -91,6 +91,36 @@ CREATE SEQUENCE public.empl_seq
 ALTER SEQUENCE public.empl_seq OWNER TO postgres;
 
 --
+-- Name: employees; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.employees (
+    id_employee character varying(10) NOT NULL,
+    nom character varying(255),
+    prenom character varying(255),
+    date date,
+    taux_horaire double precision
+);
+
+
+ALTER TABLE public.employees OWNER TO postgres;
+
+--
+-- Name: experience; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.experience (
+    id_experience character varying(50) NOT NULL,
+    designation character varying(255),
+    debut integer,
+    fin numeric,
+    augmentation double precision
+);
+
+
+ALTER TABLE public.experience OWNER TO postgres;
+
+--
 -- Name: format; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -399,6 +429,31 @@ CREATE VIEW public.v_benefice AS
 ALTER VIEW public.v_benefice OWNER TO postgres;
 
 --
+-- Name: v_employees_postes; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.v_employees_postes AS
+ WITH data AS (
+         SELECT e.id_employee,
+            e.nom,
+            e.prenom,
+            EXTRACT(year FROM age(now(), (e.date)::timestamp with time zone)) AS anciennete,
+            e.taux_horaire
+           FROM public.employees e
+        )
+ SELECT d.id_employee,
+    d.nom,
+    d.prenom,
+    exp.designation AS poste,
+    d.anciennete,
+    (d.taux_horaire * (d.anciennete)::double precision) AS taux_horaire
+   FROM (data d
+     JOIN public.experience exp ON (((d.anciennete >= (exp.debut)::numeric) AND (d.anciennete <= exp.fin))));
+
+
+ALTER VIEW public.v_employees_postes OWNER TO postgres;
+
+--
 -- Name: v_etat_stock; Type: VIEW; Schema: public; Owner: postgres
 --
 
@@ -470,6 +525,26 @@ EFF01	CAT1	PRO1	1	2
 EFF02	CAT1	PRO1	2	4
 EFF03	CAT1	PRO05	1	1
 EFF04	CAT1	PRO05	2	2
+\.
+
+
+--
+-- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.employees (id_employee, nom, prenom, date, taux_horaire) FROM stdin;
+EMP01	JACK	DIEUDONNE	2021-01-23	20
+\.
+
+
+--
+-- Data for Name: experience; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.experience (id_experience, designation, debut, fin, augmentation) FROM stdin;
+EXP01	\N	0	2	1
+EXP03	expert	3	Infinity	3
+EXP02	senior	2	2	2
 \.
 
 
@@ -675,6 +750,22 @@ ALTER TABLE ONLY public.categories
 
 ALTER TABLE ONLY public.effectifs
     ADD CONSTRAINT effectifs_pkey PRIMARY KEY (id_effectif);
+
+
+--
+-- Name: employees employees_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.employees
+    ADD CONSTRAINT employees_pkey PRIMARY KEY (id_employee);
+
+
+--
+-- Name: experience experience_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.experience
+    ADD CONSTRAINT experience_pkey PRIMARY KEY (id_experience);
 
 
 --
