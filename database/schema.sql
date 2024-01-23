@@ -38,3 +38,4 @@ CREATE TABLE experience(
     augmentation DOUBLE PRECISION
 );
 ALTER TABLE experience ALTER COLUMN fin TYPE NUMERIC;
+CREATE SEQUENCE exp_seq;
