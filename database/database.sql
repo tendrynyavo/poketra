@@ -468,6 +468,8 @@ EFF3	CAT2	PRO1	1	5
 EFF4	CAT2	PRO1	2	10
 EFF01	CAT1	PRO1	1	2
 EFF02	CAT1	PRO1	2	4
+EFF03	CAT1	PRO05	1	1
+EFF04	CAT1	PRO05	2	2
 \.
 
 
@@ -480,6 +482,7 @@ COPY public.format (id_format, nom) FROM stdin;
 1	PM
 FOR01	John
 FOR02	B3
+FOR03	Tendry
 \.
 
 
@@ -515,6 +518,8 @@ MAT001	Cuir	5000
 MAT002	Coton	4000
 MAT003	Soga	3000
 MAT004	Lin	2000
+Qua05	B5	20
+Qua06	Matiere 1	1000
 \.
 
 
@@ -541,6 +546,8 @@ PRO1	Chic Carry	11
 PRO2	Urban Elegance	14
 PRO3	Stylish Tote	15
 PRO4	Trendy Satchel	10
+PRO04	B3	20
+PRO05	Produit 1	4
 \.
 
 
@@ -595,7 +602,7 @@ SELECT pg_catalog.setval('public.cat_seq', 1, false);
 -- Name: eff_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.eff_seq', 2, true);
+SELECT pg_catalog.setval('public.eff_seq', 4, true);
 
 
 --
@@ -623,14 +630,14 @@ SELECT pg_catalog.setval('public.look_matiere_id_seq', 4, true);
 -- Name: seq_format; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_format', 2, true);
+SELECT pg_catalog.setval('public.seq_format', 3, true);
 
 
 --
 -- Name: seq_matiere; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_matiere', 2, true);
+SELECT pg_catalog.setval('public.seq_matiere', 6, true);
 
 
 --
@@ -644,14 +651,14 @@ SELECT pg_catalog.setval('public.seq_mouvement', 9, true);
 -- Name: seq_produit; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_produit', 1, false);
+SELECT pg_catalog.setval('public.seq_produit', 5, true);
 
 
 --
 -- Name: seq_quantite; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.seq_quantite', 1, false);
+SELECT pg_catalog.setval('public.seq_quantite', 1, true);
 
 
 --

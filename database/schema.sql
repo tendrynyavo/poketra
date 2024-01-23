@@ -92,6 +92,10 @@ UPDATE produit SET duree = ROUND(CAST(RANDOM() * (5) + 10 AS NUMERIC)) WHERE id_
 
 UPDATE categories SET salaire = ROUND(CAST(RANDOM() * (20) + 5 AS NUMERIC)) WHERE id_categorie = 'CAT2';
 
+ALTER TABLE quantite ADD COLUMN id_quantite VARCHAR(10) PRIMARY KEY;
+
+CREATE SEQUENCE seq_quantite;
+
 INSERT INTO produit_format_prix(id_produit,id_format,prix_de_vente)
 SELECT
     'PRO' || LPAD(CAST(ROW_NUMBER() OVER () AS TEXT),1,'0') AS id_produit,
