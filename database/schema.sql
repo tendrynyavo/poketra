@@ -51,3 +51,11 @@ CREATE TABLE client (
     nom VARCHAR(255),
     id_genre VARCHAR(10) REFERENCES genres(id_genre)
 );
+CREATE SEQUENCE achat_seq;
+CREATE TABLE achats(
+    id_achat VARCHAR(10) PRIMARY KEY,
+    id_client VARCHAR(10) REFERENCES KEY client(id_client),
+    id_produit VARCHAR(10) REFERENCES produit(id_produit),
+    date DATE,
+    quantite INT
+);

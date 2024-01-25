@@ -1,0 +1,61 @@
+package model.mouvement;
+
+import java.sql.Date;
+
+import connection.BddObject;
+import model.insert.Product;
+import personne.Client;
+
+public class Achat extends BddObject{
+    Client client;
+    Product product;
+    Date date;
+    int quantite;
+
+    public Achat() throws Exception {
+        this.setTable("achats");
+        this.setPrimaryKeyName("id_achat");
+        this.setConnection("PostgreSQL");
+        this.setFunctionPK("nextval('achat_seq')");
+        this.setCountPK(5);
+        this.setPrefix("ACH");
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDate(String date) {
+        this.setDate(Date.valueOf(date));
+    }
+
+    public int getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
+    }
+
+    
+}
