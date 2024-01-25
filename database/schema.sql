@@ -60,3 +60,4 @@ CREATE TABLE achats(
     date DATE,
     quantite INT
 );
+ALTER TABLE achats ADD COLUMN id_format VARCHAR(10) REFERENCES format(id_format);
