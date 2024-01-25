@@ -75,5 +75,20 @@ public class Quantite extends BddObject {
     public void setQuantite(String quantite) throws Exception {
         this.setQuantite(Double.parseDouble(quantite));
     }
+
+    public static void main(String[] args) throws Exception {
+        Product product = new Product();
+        product.setId("PRO1");
+        Format format = new Format();
+        format.setId("2");
+        Matiere matiere = new Matiere();
+        matiere.setId("MAT001");
+        Quantite quantite = new Quantite();
+        quantite.setProduct(product);
+        quantite.setFormat(format);
+        quantite.setMatiere(matiere);
+        quantite.setQuantite("2");
+        quantite.insert(null);
+    }
     
 }

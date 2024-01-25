@@ -1,18 +1,92 @@
 package model.employees;
 
 import java.sql.Date;
-
 import connection.BddObject;
 import connection.annotation.ColumnName;
 
-public class Employee extends BddObject{
-    String nom, prenom;
+public class Employee extends BddObject {
+    
+    String nom; 
+    String prenom;
+    Categorie categorie;
     @ColumnName("taux_horaire")
     Double tauxHoraire;
     Date date;
     String poste;
-    int anciennete;
-    String categorie;
+    Double anciennete;
+
+    public Categorie getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
+
+    public void setCategorie(String categorie) throws Exception {
+        this.categorie = (Categorie) new Categorie().setId(categorie);
+    }
+
+    public Double getAnciennete() {
+        return this.anciennete;
+    }
+
+    public void setAnciennete(Double anciennete) {
+        this.anciennete = anciennete;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public Double getTauxHoraire() {
+        return tauxHoraire;
+    }
+
+    public void setTauxHoraire(Double tauxHoraire) {
+        this.tauxHoraire = tauxHoraire;
+    }
+
+    public void setTauxHoraire(String tauxHoraire) {
+        this.setTauxHoraire(Double.parseDouble(tauxHoraire));
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDate(String date) {
+        this.setDate(Date.valueOf(date));
+    }
+
+    public String getPoste() {
+        return poste;
+    }
+
+    public void setPoste(String poste) {
+        this.poste = poste;
+    }
+
+    public String getRole() {
+        String poste = (this.getPoste() == null) ? "" : this.getPoste();
+        return this.getCategorie().getNom() + " " + poste;
+    }
 
     public Employee() throws Exception{
         super();
@@ -24,71 +98,9 @@ public class Employee extends BddObject{
         this.setPrefix("EMP");
     }
 
-    
-
-    public Double getTauxHoraire() {
-        return tauxHoraire;
-    }
-    public void setTauxHoraire(Double tauxHoraire) {
-        this.tauxHoraire = tauxHoraire;
-    }
-    public String getNom() {
-        return nom;
-    }
-    public String getPrenom() {
-        return prenom;
-    }
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-    public Date getDate() {
-        return date;
-    }
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getPoste() {
-        return poste;
-    }
-
-    public void setPoste(String poste) {
-        this.poste = poste;
-    }
-
-    public void setAnciennete(int anciennete) {
-        this.anciennete = anciennete;
-    }
-
-    public Employee[] getAnciennete() throws Exception {
+    public Employee[] getAncienneteEmployee() throws Exception {
         Employee employee = new Employee();
-        
         employee.setTable("v_employees_postes");
-        return (Employee[])employee.findAll(null);
-    }
-
-    public static void main(String[] args) throws Exception {
-        Employee employee1 = new Employee();
-        for (Employee employee : employee1.getAnciennete()) {
-            System.out.println(employee.getId());
-            System.out.println(employee.getNom());
-            System.out.println(employee.getPrenom());
-            System.out.println(employee.getPoste());
-            System.out.println(employee.getAnciennete());
-            System.out.println(employee.getTauxHoraire());
-        }
-    }
-
-
-
-    public String getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
+        return (Employee[]) employee.findAll(null);
     }
 }
