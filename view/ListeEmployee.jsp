@@ -40,7 +40,7 @@
                             <tr>
                                 <td><%= employee.getId() %></td>
                                 <td><%= employee.getNom() %></td>
-                                <td><%= employee.getPoste() %></td>
+                                <td><%= employee.getRole() %></td>
                                 <td><%= employee.getAnciennete() %></td>
                                 <td><%= employee.getTauxHoraire() %></td>
                             </tr>

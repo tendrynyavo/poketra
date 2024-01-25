@@ -1,6 +1,5 @@
 package model.fabrication;
 
-import java.sql.Connection;
 import java.sql.Date;
 import connection.BddObject;
 import model.insert.Format;

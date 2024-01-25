@@ -8,11 +8,24 @@ public class Employee extends BddObject {
     
     String nom; 
     String prenom;
+    Categorie categorie;
     @ColumnName("taux_horaire")
     Double tauxHoraire;
     Date date;
     String poste;
     Double anciennete;
+
+    public Categorie getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
+
+    public void setCategorie(String categorie) throws Exception {
+        this.categorie = (Categorie) new Categorie().setId(categorie);
+    }
 
     public Double getAnciennete() {
         return this.anciennete;
@@ -71,7 +84,8 @@ public class Employee extends BddObject {
     }
 
     public String getRole() {
-        return this.getPoste();
+        String poste = (this.getPoste() == null) ? "" : this.getPoste();
+        return this.getCategorie().getNom() + " " + poste;
     }
 
     public Employee() throws Exception{

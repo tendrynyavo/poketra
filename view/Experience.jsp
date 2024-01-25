@@ -1,14 +1,11 @@
 <%@page import="formulaire.Formulaire"%>
-<%@page import="model.employees.Employee"%>
+<%@page import="model.employees.Experience"%>
 <%
 
-    Formulaire formulaire = new Employee().createFormulaire("insert");
-    formulaire.getListeChamp()[3].setLabel("Taux horaire");
-    formulaire.getListeChamp()[5].setVisible(false);
-    formulaire.getListeChamp()[6].setVisible(false);
-    formulaire.setTitle("Insertion de Employee");
-    formulaire.setRedirect("/poketra/Employee.jsp");
-    formulaire.setRedirectError("/poketra/Employee.jsp?error=");
+    Formulaire formulaire = new Experience().createFormulaire("insert");
+    formulaire.setTitle("Insertion de Experience");
+    formulaire.setRedirect("/poketra/Experience.jsp");
+    formulaire.setRedirectError("/poketra/Experience.jsp?error=");
     String error = (request.getParameter("error") == null) ? "" : request.getParameter("error");
     formulaire.setError(error);
 

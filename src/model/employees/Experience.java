@@ -4,24 +4,19 @@ import connection.BddObject;
 
 public class Experience extends BddObject {
 
-    String id_experience,designation;
-    Double debut, fin, augmentation;
+    String designation;
+    Double debut;
+    Double fin;
+    Double augmentation;
 
     public Experience() throws Exception {
+        super();
         this.setTable("experience");
         this.setPrimaryKeyName("id_experience");
         this.setConnection("PostgreSQL");
         this.setFunctionPK("nextval('exp_seq')");
         this.setCountPK(5);
         this.setPrefix("EXP");
-    }
-
-    public String getId_experience() {
-        return id_experience;
-    }
-
-    public void setId_experience(String id_experience) {
-        this.id_experience = id_experience;
     }
 
     public String getDesignation() {

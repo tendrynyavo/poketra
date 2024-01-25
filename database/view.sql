@@ -68,7 +68,7 @@ JOIN
 ON
     pe.id_produit = pp.id_produit AND
     pe.id_format = pp.id_format;
-CREATE VIEW v_employees_postes AS
+CREATE OR REPLACE VIEW v_employees_postes AS
 WITH data AS (
     SELECT
         e.id_employee,
@@ -87,7 +87,7 @@ SELECT
     d.id_categorie,
     exp.designation AS poste,
     d.anciennete,
-    (d.taux_horaire * anciennete) AS taux_horaire
+    (d.taux_horaire * exp.augmentation) AS taux_horaire
 FROM
     data d
 JOIN
