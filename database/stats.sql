@@ -48,7 +48,7 @@ SELECT
     vi.id_produit,
     vi.id_format,
     vi.id_genre,
-    vi.nombre
+    vi.nombre 
 FROM    
     v_initial vi
 UNION ALL
