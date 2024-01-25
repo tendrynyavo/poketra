@@ -3,12 +3,14 @@ package model.mouvement;
 import java.sql.Date;
 
 import connection.BddObject;
+import model.insert.Format;
 import model.insert.Product;
 import personne.Client;
 
 public class Achat extends BddObject{
     Client client;
     Product product;
+    Format format;
     Date date;
     int quantite;
 
@@ -69,5 +71,16 @@ public class Achat extends BddObject{
         this.setQuantite(Integer.valueOf(quantite));
     }
 
+    public Format getFormat() {
+        return format;
+    }
+
+    public void setFormat(Format format) {
+        this.format = format;
+    }
+
+    public void setFormat(String format) throws Exception {
+        this.setFormat((Format) new Format().setId(format));
+    }
     
 }
