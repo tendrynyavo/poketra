@@ -29,12 +29,20 @@ public class Achat extends BddObject{
         this.client = client;
     }
 
+    public void setClient(String client) throws Exception {
+        this.setClient((Client) new Client().setId(client));
+    }
+
     public Product getProduct() {
         return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public void setProduct(String product) throws Exception {
+        this.setProduct((Product) new Product().setId(product));
     }
 
     public Date getDate() {
@@ -55,6 +63,10 @@ public class Achat extends BddObject{
 
     public void setQuantite(int quantite) {
         this.quantite = quantite;
+    }
+
+    public void setQuantite(String quantite) {
+        this.setQuantite(Integer.valueOf(quantite));
     }
 
     
