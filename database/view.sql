@@ -87,7 +87,7 @@ SELECT
     d.id_categorie,
     exp.designation AS poste,
     d.anciennete,
-    (d.taux_horaire * anciennete) AS taux_horaire
+    (d.taux_horaire * exp.augmentation) AS taux_horaire
 FROM
     data d
 JOIN

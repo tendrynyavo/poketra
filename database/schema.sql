@@ -40,3 +40,14 @@ CREATE TABLE experience(
 ALTER TABLE experience ALTER COLUMN fin TYPE NUMERIC;
 CREATE SEQUENCE exp_seq;
 ALTER TABLE employees ADD COLUMN id_categorie VARCHAR(50) REFERENCES categories(id_categorie);
+CREATE SEQUENCE genre_seq;
+CREATE TABLE genres (
+    id_genre VARCHAR(10) PRIMARY KEY,
+    nom VARCHAR(10)
+);
+CREATE SEQUENCE client_seq;
+CREATE TABLE client (
+    id_client VARCHAR(10) PRIMARY KEY,
+    nom VARCHAR(255),
+    id_genre VARCHAR(10) REFERENCES genres(id_genre)
+);
