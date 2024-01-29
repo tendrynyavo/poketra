@@ -135,4 +135,4 @@ SELECT
 FROM
     v_stat_produit_format_genre vspfg;
 
-SELECT vsi.id_genre, MAX(vsi.nombre) FROM v_stat_initiale vsi WHERE vsi.id_produit LIKE '%%' AND vsi.id_format LIKE '%%' GROUP BY vsi.id_genre;
+SELECT vsi.id_genre, MAX(vsi.nombre) AS nombre FROM v_stat_initiale vsi WHERE vsi.id_produit LIKE '%%' AND vsi.id_format LIKE '%%' GROUP BY vsi.id_genre;
