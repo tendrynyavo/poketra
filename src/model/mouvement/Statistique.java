@@ -1,16 +1,16 @@
 package model.mouvement;
 
 import java.sql.Connection;
-
 import connection.BddObject;
-import model.prix.ListeProduitBenefice;
 import personne.Genre;
 
 public class Statistique extends BddObject{
+    
     Genre genre;
     int nombre;
 
     public Statistique() throws Exception{
+        super();
         this.setTable("achats");
         this.setPrimaryKeyName("id_achat");
         this.setConnection("PostgreSQL");

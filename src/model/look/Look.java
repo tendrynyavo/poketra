@@ -3,21 +3,18 @@ package model.look;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import connection.BddObject;
 import model.matiere.*;
-
-import static connexion.ConnexionToDatabase.*;
 
 public class Look extends BddObject{
     String nom;
 
     Matiere[] matieres;
 
-    public Look() throws Exception{
+    public Look() throws Exception {
+        super();
         this.setTable("Look");
         this.setPrimaryKeyName("id");
         this.setConnection("PostgreSQL");
@@ -29,17 +26,10 @@ public class Look extends BddObject{
         setNom(nom);
     }
 
-    // public String getId() {
-    //     return id;
-    // }
-
     public String getNom() {
         return nom;
     }
 
-    // public void setId(String id) {
-    //     this.id = id;
-    // }
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -72,10 +62,10 @@ public class Look extends BddObject{
                 if(look == null) {
                     look = new Look(resultSet.getString(2), resultSet.getString(3));
                 }
-                // matieres.add(new Matiere(resultSet.getString(4), resultSet.getString(5)));
             }
 
-            look.setMatieres(matieres.toArray(new Matiere[0]));
+            if (look != null)
+                look.setMatieres(matieres.toArray(new Matiere[0]));
 
         } finally {
             if (resultSet != null) {
