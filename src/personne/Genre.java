@@ -6,6 +6,7 @@ public class Genre extends BddObject{
     String nom;
 
     public Genre() throws Exception {
+        super();
         this.setTable("genres");
         this.setPrimaryKeyName("id_genre");
         this.setConnection("PostgreSQL");
@@ -20,6 +21,11 @@ public class Genre extends BddObject{
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    @Override
+    public String toString() {
+        return this.getNom();
     }
 
     

@@ -36,7 +36,7 @@ public class Statistique extends BddObject{
     }
 
     public Statistique[] filtre(String produit, String genre) throws Exception{
-        String sql = "SELECT vsi.id_genre, MAX(vsi.nombre) FROM v_stat_initiale vsi WHERE vsi.id_produit LIKE '%s' AND vsi.id_format LIKE '%s' GROUP BY vsi.id_genre;";
+        String sql = "SELECT vsi.id_genre, SUM(vsi.nombre) as nombre FROM v_stat_initiale vsi WHERE vsi.id_produit LIKE '%s' AND vsi.id_format LIKE '%s' GROUP BY vsi.id_genre;";
 
         Statistique[] statistiques;
 
