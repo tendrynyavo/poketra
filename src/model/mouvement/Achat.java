@@ -1,8 +1,10 @@
 package model.mouvement;
 
+import java.sql.Connection;
 import java.sql.Date;
 
 import connection.BddObject;
+import connection.Column;
 import model.insert.Format;
 import model.insert.Product;
 import personne.Client;
@@ -83,4 +85,32 @@ public class Achat extends BddObject{
         this.setFormat((Format) new Format().setId(format));
     }
     
+    public void insert(Connection connection, Column... args) {
+        Mouvement[] mouvements = null;
+        boolean connect = false;
+        try {
+            if (connection == null) {
+                connection = this.getConnection();
+                connect = true;
+            }
+            
+            super.insert(connection, args);
+
+            Product product = (Product) new Product().setId(this.getProduct().getId()).getById(connection);
+            
+
+            product.fabriquerProduit(this.getDate().toString(), String.valueOf(this.getQuantite()),connection);
+
+            connection.commit();
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 }
