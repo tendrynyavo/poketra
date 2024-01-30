@@ -98,11 +98,14 @@ public class Product extends BddObject {
         return mouvements;
     }
 
-    public Mouvement[] fabriquer(String date, String quantite) throws Exception {
-        Connection connection = null;
+    public Mouvement[] fabriquerProduit(String date, String quantite, Connection connection) throws Exception {
         Mouvement[] mouvements = null;
+        boolean connect = false;
         try {
-            connection = this.getConnection();
+            if (connection == null) {
+                connection = this.getConnection();
+                connect = true;
+            }
             mouvements = this.fabriquer(date, quantite, connection);
             
             for (Mouvement mouvement : mouvements) {
@@ -116,7 +119,7 @@ public class Product extends BddObject {
             }
             throw e;
         } finally {
-            if (connection != null) {
+            if (connect && connection != null) {
                 connection.close();
             }
         }

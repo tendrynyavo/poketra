@@ -77,7 +77,7 @@ public class Fabrication extends BddObject {
         Format format = new Format();
         format.setId(idFormat);
         product.setFormat(format);
-        return product.fabriquer(date, quantite);
+        return product.fabriquerProduit(date, quantite, null);
     }
 
 }
