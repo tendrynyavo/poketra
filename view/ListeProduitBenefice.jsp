@@ -1,8 +1,14 @@
 <%@page import="formulaire.table.Table"%>
 <%@page import="model.prix.ListeProduitBenefice"%>
+<%@page import="formulaire.Formulaire"%>
+<%@page import="model.affichage.Filtre"%>
 <%
 
+    Formulaire formulaire = new Filtre().createFormulaire("/poketra/ListeProduitBenefice.jsp");
+    formulaire.setTitle("Filtre");
     ListeProduitBenefice[] filtres = new ListeProduitBenefice().filtre(request.getParameter("min"), request.getParameter("max"));
+    Table table = new Table().createTable(filtres);
+    table.getChamps()[7].setVisible(false);
 
 %>
 <!DOCTYPE html>
@@ -24,30 +30,10 @@
             <jsp:include page="./header.html" />
 
             <div class="col-sm p-3 min-vh-100">
-                <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
-                    <h2>Liste Produit entre <%=request.getParameter("min")%> et <%=request.getParameter("max")%></h2>
-                    <table class="table table-striped mt-3">
-                        <thead>
-                            <tr>
-                                <th>Nom</th>
-                                <th>Format</th>
-                                <th>Prix de vente</th>
-                                <th>Depense</th>
-                                <th>Benefice</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for (ListeProduitBenefice filtre : filtres) { %>
-                                <tr>
-                                    <td><%= filtre.getProduct().getNom()%></td>
-                                    <td><%= filtre.getFormat().getNom()%></td>
-                                    <td><%= filtre.getPrixVente() %></td>
-                                    <td><%= filtre.getDepense() %></td>
-                                    <td><%= filtre.getBenefice() %></td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                        </table>
+                <div class="mx-auto p-5 bg-white rounded shadow-sm">
+                    <%=formulaire %>
+                    <h2>Liste Produit entre <%=request.getParameter("min") %> et <%=request.getParameter("max") %></h2>
+                    <%=table %>
                 </div>
             </div>
         </div>

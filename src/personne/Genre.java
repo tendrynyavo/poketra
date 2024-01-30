@@ -2,7 +2,8 @@ package personne;
 
 import connection.BddObject;
 
-public class Genre extends BddObject{
+public class Genre extends BddObject {
+
     String nom;
 
     public Genre() throws Exception {
@@ -27,6 +28,5 @@ public class Genre extends BddObject{
     public String toString() {
         return this.getNom();
     }
-
     
 }

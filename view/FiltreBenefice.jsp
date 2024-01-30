@@ -25,7 +25,7 @@
             <jsp:include page="./header.html" />
 
             <div class="col-sm p-3 min-vh-100">
-                <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
+                <div class="mx-auto p-5 bg-white rounded shadow-sm">
                     <%=formulaire %>
                 </div>
             </div>

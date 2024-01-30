@@ -17,7 +17,7 @@ copy .\web.xml .\target\WEB-INF\
 copy .\config.xml .\target\WEB-INF\classes
 
 @REM Copy Front-end
-Xcopy assets .\target\assets /E /H /C /I /Y
+@REM Xcopy assets .\target\assets /E /H /C /I /Y
 Xcopy view .\target\ /E /H /C /I /Y
 Xcopy controller .\target\controller /E /H /C /I /Y
 

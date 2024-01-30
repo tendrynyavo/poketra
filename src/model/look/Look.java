@@ -8,9 +8,9 @@ import java.util.List;
 import connection.BddObject;
 import model.matiere.*;
 
-public class Look extends BddObject{
+public class Look extends BddObject {
+    
     String nom;
-
     Matiere[] matieres;
 
     public Look() throws Exception {

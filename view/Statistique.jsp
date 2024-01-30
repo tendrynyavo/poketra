@@ -3,6 +3,8 @@
 <%
 
     Statistique[] statistiques = new Statistique().filtre("%"+request.getParameter("produit")+"%", "%"+request.getParameter("format")+"%");
+    Table table = new Table().createTable(statistiques);
+    table.getChamps()[2].setVisible(false);
 
 %>
 <!DOCTYPE html>
@@ -16,7 +18,6 @@
     <link rel="stylesheet" href="/poketra/assets/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/poketra/assets/css/style.css">
     <link rel="stylesheet" href="/poketra/assets/css/demande/demande.css">
-    <%-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --%>
     <title>Genre</title>
 </head>
 <body>
@@ -28,23 +29,8 @@
             <div class="col-sm p-3 min-vh-100">
                 <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
                     <h2>Statistique</h2>
-                    <table class="table table-striped mt-3">
-                        <thead>
-                            <tr>
-                                <th>Genre</th>
-                                <th>Nombre</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for (Statistique statistique : statistiques) { %>
-                                <tr>
-                                    <td><%= statistique.getGenre().getNom()%></td>
-                                    <td><%= statistique.getNombre()%></td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                        </table>
-                        <canvas id="doughnutChart" width="400" height="400"></canvas>
+                    <%=table %>
+                    <canvas id="doughnutChart" width="400" height="400"></canvas>
                 </div>
                 <!-- Create a canvas element to render the chart -->
 

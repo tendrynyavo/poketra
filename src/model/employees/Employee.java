@@ -23,10 +23,6 @@ public class Employee extends BddObject {
         this.categorie = categorie;
     }
 
-    public void setCategorie(String categorie) throws Exception {
-        this.categorie = (Categorie) new Categorie().setId(categorie);
-    }
-
     public Double getAnciennete() {
         return this.anciennete;
     }
@@ -59,20 +55,12 @@ public class Employee extends BddObject {
         this.tauxHoraire = tauxHoraire;
     }
 
-    public void setTauxHoraire(String tauxHoraire) {
-        this.setTauxHoraire(Double.parseDouble(tauxHoraire));
-    }
-
     public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public void setDate(String date) {
-        this.setDate(Date.valueOf(date));
     }
 
     public String getPoste() {

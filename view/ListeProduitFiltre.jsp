@@ -24,7 +24,7 @@
             <jsp:include page="./header.html" />
 
             <div class="col-sm p-3 min-vh-100">
-                <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
+                <div class="mx-auto p-5 bg-white rounded shadow-sm">
                     <h2>Liste Produit entre <%=request.getParameter("min")%> et <%=request.getParameter("max")%></h2>
                     <table class="table table-striped mt-3">
                         <thead>

@@ -2,7 +2,7 @@ package personne;
 
 import connection.BddObject;
 
-public class Client extends BddObject{
+public class Client extends BddObject {
     
     String nom;
     Genre genre;
@@ -33,14 +33,9 @@ public class Client extends BddObject{
         this.genre = genre;
     }
 
-    public void setGenre(String genre) throws Exception {
-        this.setGenre((Genre) new Genre().setId(genre));
-    }
-
     @Override
     public String toString() {
         return this.getNom();
     }
-
     
 }

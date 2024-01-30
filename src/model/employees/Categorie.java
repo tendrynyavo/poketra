@@ -17,30 +17,23 @@ public class Categorie extends BddObject {
         }
         this.salaire = salaire;
     }
-
-    public void setSalaire(String salaire) {
-        if (salaire.isEmpty())
-            throw new IllegalArgumentException("Salaire est vide");
-        this.setSalaire(Double.parseDouble(salaire));
+    
+    public String getNom() {
+        return nom;
     }
-
-    public Categorie() throws Exception{
+    
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+    
+    public Categorie() throws Exception {
+        super();
         this.setTable("Categories");
         this.setPrimaryKeyName("id_categorie");
         this.setConnection("PostgreSQL");
         this.setFunctionPK("nextval('cat_seq')");
         this.setCountPK(5);
         this.setPrefix("CAT");
-    }
-    
-    public String getNom() {
-        return nom;
-    }
-    public double getPrix() {
-        return salaire;
-    }
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     @Override

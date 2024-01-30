@@ -92,9 +92,5 @@ public class ListeProduitBenefice extends BddObject {
 
         return listeProduitFiltre;
     }
-
-    public ListeProduitBenefice[] getListeProduitBeneficesRange(String min, String max) {
-        return null;
-    }
     
 }
