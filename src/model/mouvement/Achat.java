@@ -85,8 +85,7 @@ public class Achat extends BddObject{
         this.setFormat((Format) new Format().setId(format));
     }
     
-    public void insert(Connection connection, Column... args) {
-        Mouvement[] mouvements = null;
+    public void insert(Connection connection, Column... args) throws Exception {
         boolean connect = false;
         try {
             if (connection == null) {
@@ -108,7 +107,7 @@ public class Achat extends BddObject{
             }
             throw e;
         } finally {
-            if (connection != null) {
+            if (connection != null && connect) {
                 connection.close();
             }
         }
