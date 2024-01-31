@@ -21,7 +21,7 @@
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
             
-            <jsp:include page="./header.html" />
+            <jsp:include page="../header.html" />
 
             <div class="col-sm p-3 min-vh-100">
                 <div class="mx-auto p-5 bg-white rounded shadow-sm">

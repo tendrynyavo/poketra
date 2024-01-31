@@ -1,8 +1,9 @@
 <%@page import="formulaire.Formulaire"%>
-<%@page import="model.affichage.Filtre"%>
+<%@page import="model.affichage.FiltreGenre"%>
 <%
 
-    Formulaire formulaire = new Filtre().createFormulaire("/poketra/ListeProduitFiltre.jsp");
+    Formulaire formulaire = new FiltreGenre().createFormulaire("/poketra/statistique/Statistique.jsp");
+    formulaire.setMethode("GET");
     formulaire.setTitle("Filtre");
 
 %>
@@ -22,11 +23,15 @@
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
             
-            <jsp:include page="./header.html" />
+            <jsp:include page="../header.html" />
 
             <div class="col-sm p-3 min-vh-100">
+                <jsp:include page="./navbar.html" />
                 <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
                     <%=formulaire %>
+                    <a href="/poketra/statistique/Statistique.jsp?produit=&&format=">
+                        <button class="btn btn-outline-success">Tous Produit</button>
+                    </a>
                 </div>
             </div>
         </div>

@@ -87,12 +87,12 @@ public class Product extends BddObject {
         EtatStock stock = new EtatStock().getEtatStock(connection);
         for (int i = 0; i < mouvements.length; i++) {
             mouvements[i] = new Mouvement();
-            mouvements[i].getColumns().get(2).setName("entree");
+            mouvements[i].getColumns().get(2).setName("sortie");
             mouvements[i].setMatiere(matieres[i]);
             mouvements[i].setDate(date);
             mouvements[i].setQuantite(quantiteParse * matieres[i].getQuantite());
             if (!stock.suffisant(mouvements[i])) {
-                throw new Exception(String.format("Matière %s insuffisante", matieres[i].getNom()));
+                throw new IllegalArgumentException(String.format("Matière %s insuffisante", matieres[i].getNom()));
             }
         }
         return mouvements;

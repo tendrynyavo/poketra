@@ -1,11 +1,13 @@
 <%@page import="formulaire.Formulaire"%>
-<%@page import="personne.Genre"%>
+<%@page import="model.insert.Product"%>
 <%
 
-    Formulaire formulaire = new Genre().createFormulaire("insert");
-    formulaire.setTitle("Insertion de Genre");
-    formulaire.setRedirect("/poketra/Genre.jsp");
-    formulaire.setRedirectError("/poketra/Genre.jsp?error=");
+    Formulaire formulaire = new Product().createFormulaire("insert");
+    formulaire.getListeChamp()[3].setVisible(false);
+    formulaire.getListeChamp()[1].setVisible(false);
+    formulaire.setTitle("Insertion de Produit");
+    formulaire.setRedirect("/poketra/entity/Product.jsp");
+    formulaire.setRedirectError("/poketra/entity/Product.jsp?error=");
     String error = (request.getParameter("error") == null) ? "" : request.getParameter("error");
     formulaire.setError(error);
 
@@ -26,9 +28,10 @@
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
             
-            <jsp:include page="./header.html" />
+            <jsp:include page="../header.html" />
 
             <div class="col-sm p-3 min-vh-100">
+                <jsp:include page="./navbar.html" />
                 <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
                     <%=formulaire %>
                 </div>

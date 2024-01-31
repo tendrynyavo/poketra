@@ -1,13 +1,14 @@
-<%@page import="formulaire.Formulaire"%>
-<%@page import="model.insert.Quantite"%>
+<%@page import="model.employees.Employee"%>
+<%@page import="formulaire.table.Table"%>
+<%@page import="formulaire.component.Button"%>
 <%
 
-    Formulaire formulaire = new Quantite().createFormulaire("insert");
-    formulaire.setTitle("Insertion de Quantite");
-    formulaire.setRedirect("/poketra/Quantite.jsp");
-    formulaire.setRedirectError("/poketra/Quantite.jsp?error=");
-    String error = (request.getParameter("error") == null) ? "" : request.getParameter("error");
-    formulaire.setError(error);
+    Employee[] employees = new Employee().getAncienneteEmployee();
+    Table table = new Table().createTable(employees).addButton(new Button("Update", "Id", "btn btn-primary", "update.jsp?id="));
+    table.getChamps()[4].setVisible(false);
+    table.getChamps()[7].setVisible(false);
+    table.getChamps()[5].setVisible(false);
+    table.getChamps()[3].setLabel("Taux horaire");
 
 %>
 <!DOCTYPE html>
@@ -25,12 +26,13 @@
 <body>
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
-
-            <jsp:include page="./header.html" />
+            
+            <jsp:include page="../header.html" />
 
             <div class="col-sm p-3 min-vh-100">
-                <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
-                    <%=formulaire %>
+                <div class="mx-auto p-5 bg-white rounded shadow-sm">
+                    <h2>Liste des postes par employee</h2>
+                    <%=table %>
                 </div>
             </div>
         </div>

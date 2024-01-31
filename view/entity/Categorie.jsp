@@ -1,14 +1,13 @@
-<%@page import="formulaire.table.Table"%>
-<%@page import="model.prix.ListeProduitBenefice"%>
 <%@page import="formulaire.Formulaire"%>
-<%@page import="model.affichage.Filtre"%>
+<%@page import="model.employees.Categorie"%>
 <%
 
-    Formulaire formulaire = new Filtre().createFormulaire("/poketra/ListeProduitBenefice.jsp");
-    formulaire.setTitle("Filtre");
-    ListeProduitBenefice[] filtres = new ListeProduitBenefice().filtre(request.getParameter("min"), request.getParameter("max"));
-    Table table = new Table().createTable(filtres);
-    table.getChamps()[7].setVisible(false);
+    Formulaire formulaire = new Categorie().createFormulaire("insert");
+    formulaire.setTitle("Insertion de Categorie");
+    formulaire.setRedirect("/poketra/entity/Categorie.jsp");
+    formulaire.setRedirectError("/poketra/entity/Categorie.jsp?error=");
+    String error = (request.getParameter("error") == null) ? "" : request.getParameter("error");
+    formulaire.setError(error);
 
 %>
 <!DOCTYPE html>
@@ -24,16 +23,16 @@
     <title>Document</title>
 </head>
 <body>
+    
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
             
-            <jsp:include page="./header.html" />
+            <jsp:include page="../header.html" />
 
             <div class="col-sm p-3 min-vh-100">
-                <div class="mx-auto p-5 bg-white rounded shadow-sm">
+                <jsp:include page="./navbar.html" />
+                <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
                     <%=formulaire %>
-                    <h2>Liste Produit entre <%=request.getParameter("min") %> et <%=request.getParameter("max") %></h2>
-                    <%=table %>
                 </div>
             </div>
         </div>

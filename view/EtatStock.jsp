@@ -1,4 +1,6 @@
 <%@page import="formulaire.table.Table"%>
+<%@page import="model.mouvement.EtatStock"%>
+<%@page import="model.mouvement.ListeStock"%>
 <%@page import="model.prix.ListeProduitFiltre"%>
 <%
 
@@ -29,13 +31,13 @@
                     <table class="table table-striped mt-3">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Nom</th>
-                                <th>Format</th>
-                                <th>Prix</th>
+                                <th>Quantite restant</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% for (ListeStock stock : etatStock.getListeStocks()) { %>
+                            <% for (ListeStock stock : etatStock.getListeStock()) { %>
                                 <tr>
                                     <td><%= stock.getMatiere().getId()%></td>
                                     <td><%= stock.getMatiere().getNom()%></td>

@@ -1,10 +1,13 @@
 <%@page import="formulaire.Formulaire"%>
-<%@page import="model.affichage.FiltreGenre"%>
+<%@page import="personne.Genre"%>
 <%
 
-    Formulaire formulaire = new FiltreGenre().createFormulaire("/poketra/Statistique.jsp");
-    formulaire.setMethode("GET");
-    formulaire.setTitle("Filtre");
+    Formulaire formulaire = new Genre().createFormulaire("insert");
+    formulaire.setTitle("Insertion de Genre");
+    formulaire.setRedirect("/poketra/entity/Genre.jsp");
+    formulaire.setRedirectError("/poketra/entity/Genre.jsp?error=");
+    String error = (request.getParameter("error") == null) ? "" : request.getParameter("error");
+    formulaire.setError(error);
 
 %>
 <!DOCTYPE html>
@@ -23,15 +26,13 @@
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
             
-            <jsp:include page="./header.html" />
+            <jsp:include page="../header.html" />
 
             <div class="col-sm p-3 min-vh-100">
+                <jsp:include page="./navbar.html" />
                 <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
                     <%=formulaire %>
                 </div>
-                <a href="/poketra/Statistique.jsp?produit=&&format=">
-                    <button class="btn btn-outline-success">Tous Produit</button>
-                </a>
             </div>
         </div>
     </div>

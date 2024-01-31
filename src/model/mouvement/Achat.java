@@ -85,6 +85,7 @@ public class Achat extends BddObject{
         this.setFormat((Format) new Format().setId(format));
     }
     
+    @Override
     public void insert(Connection connection, Column... args) throws Exception {
         boolean connect = false;
         try {
@@ -98,7 +99,7 @@ public class Achat extends BddObject{
             Product product = (Product) new Product().setId(this.getProduct().getId()).getById(connection);
             
 
-            product.fabriquerProduit(this.getDate().toString(), String.valueOf(this.getQuantite()),connection);
+            product.fabriquerProduit(this.getDate().toString(), String.valueOf(this.getQuantite()), connection);
 
             connection.commit();
         } catch (Exception e) {

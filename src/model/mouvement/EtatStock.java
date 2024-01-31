@@ -30,7 +30,7 @@ public class EtatStock {
 
     public EtatStock getEtatStock(Connection c) throws Exception {
         ListeStock foo = new ListeStock();
-        this.setListeStock((ListeStock[]) foo.findAll(c,null));
+        this.setListeStock((ListeStock[]) foo.findAll(c, null));
         return this;
     }
 

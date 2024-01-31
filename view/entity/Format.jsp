@@ -1,14 +1,13 @@
-<%@page import="model.employees.Employee"%>
-<%@page import="formulaire.table.Table"%>
-<%@page import="formulaire.component.Button"%>
+<%@page import="formulaire.Formulaire"%>
+<%@page import="model.insert.Format"%>
 <%
 
-    Employee[] employees = new Employee().getAncienneteEmployee();
-    Table table = new Table().createTable(employees).addButton(new Button("Update", "Id", "btn btn-primary", "update.jsp?id="));
-    table.getChamps()[4].setVisible(false);
-    table.getChamps()[7].setVisible(false);
-    table.getChamps()[5].setVisible(false);
-    table.getChamps()[3].setLabel("Taux horaire");
+    Formulaire formulaire = new Format().createFormulaire("insert");
+    formulaire.setTitle("Insertion de Format");
+    formulaire.setRedirect("/poketra/entity/Format.jsp");
+    formulaire.setRedirectError("/poketra/entity/Format.jsp?error=");
+    String error = (request.getParameter("error") == null) ? "" : request.getParameter("error");
+    formulaire.setError(error);
 
 %>
 <!DOCTYPE html>
@@ -27,12 +26,12 @@
     <div class="container-fluid">
         <div class="row" style="background-color: #f5f5f5;">
             
-            <jsp:include page="./header.html" />
-
+            <jsp:include page="../header.html" />
+            
             <div class="col-sm p-3 min-vh-100">
-                <div class="mx-auto p-5 bg-white rounded shadow-sm">
-                    <h2>Liste des postes par employee</h2>
-                    <%=table %>
+                <jsp:include page="./navbar.html" />
+                <div class="mx-auto w-50 p-5 bg-white rounded shadow-sm">
+                    <%=formulaire %>
                 </div>
             </div>
         </div>

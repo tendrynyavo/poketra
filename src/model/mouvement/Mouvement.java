@@ -3,14 +3,16 @@ package model.mouvement;
 import java.sql.Date;
 
 import connection.BddObject;
+import connection.annotation.ColumnName;
 import model.matiere.Matiere;
 
 public class Mouvement extends BddObject {
 
     Matiere matiere;
     Date date;
-    Double  quantite,
-            prix;
+    @ColumnName("entree")
+    Double  quantite;
+            Double prix;
     
     public Mouvement() throws Exception {
         super();

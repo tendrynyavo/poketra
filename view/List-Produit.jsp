@@ -2,8 +2,10 @@
 <%@page import="model.insert.Quantite"%>
 
 <% 
+
     Matiere matiere = new Matiere(request.getParameter("matiere"));
     Matiere[] matieres = (Matiere[]) new Matiere().findAll(null);
+    
 %>
 
 <!DOCTYPE html>
